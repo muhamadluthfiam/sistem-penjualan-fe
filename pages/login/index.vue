@@ -6,7 +6,7 @@
     <p class="mt-4 text-base leading-7 text-center mb-[50px] text-grey">
       Manage your employees to achieve <br> a bigger goals for your company
     </p>
-    <form class="w-full card">
+    <form class="w-full lg:w-1/3 card">
       <div class="form-group">
         <label for="" class="text-grey">Email Address</label>
         <input v-model="user.email" type="email" class="input-field">

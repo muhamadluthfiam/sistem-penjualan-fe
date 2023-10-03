@@ -50,11 +50,26 @@
           <img src="/svgs/ic-settings.svg" alt="">
           Settings
         </NuxtLink>
-        <NuxtLink to="#" class="nav-link">
+        <button @click="logout()" class="nav-link">
           <img src="/svgs/ic-signout.svg" alt="">
           Logout
-        </NuxtLink>
+        </button>
       </div>
     </div>
   </div>
 </template>
+<script setup>
+import { ref } from 'vue'
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '~/store/auth';
+
+const { loggedOut } = useAuthStore()
+const router = useRouter()
+const token = 'token'
+
+const logout = async () => {
+  loggedOut(token)
+  await router.push('/')
+  location.reload()
+}
+</script>

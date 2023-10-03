@@ -22,6 +22,12 @@ export const useAuthStore = defineStore('auth', {
         token.value = data.value.data.token
         this.isAuthenticated = true
       }
+    },
+
+    async loggedOut(val) {
+      const token = useCookie(val)
+      token.value = null
+      this.loading = pending
     }
   }
 })
