@@ -9,23 +9,43 @@
     <form class="w-full card">
       <div class="form-group">
         <label for="" class="text-grey">Email Address</label>
-        <input type="email" class="input-field">
+        <input v-model="user.email" type="email" class="input-field">
       </div>
       <div class="form-group">
-          <label for="" class="text-grey">Password</label>
-          <input type="password" class="input-field">
+        <label for="" class="text-grey">Password</label>
+        <input v-model="user.password" type="password" class="input-field">
       </div>
-      <a href="index.html" class="w-full btn btn-primary mt-[14px]">
-          Sign In
-      </a>
-      <!-- <button type="button" class="w-full btn btn-primary mt-[14px]">
-          Sign In
-      </button> -->
+      <!-- <nuxt-link v-if="!authenticated" to="/login" class="w-full btn btn-primary mt-[14px]">Login</nuxt-link> -->
+
+      <button @click="login" type="button" class="w-full btn btn-primary mt-[14px]">
+        Sign In
+      </button>
     </form>
   </div>
 </template>
 <script setup>
-  definePageMeta({
-    layout: 'authentication'
-  })
+import { ref } from 'vue'
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '~/store/auth';
+
+const { authenticatedUser } = useAuthStore()
+const router = useRouter()
+const { isAuthenticated } = storeToRefs(useAuthStore());
+
+const user = ref({
+  email: '',
+  password: '',
+});
+
+const login = async () => {
+  await authenticatedUser(user.value)
+  if (isAuthenticated) {
+    router.push('/')
+  }
+}
+
+definePageMeta({
+  layout: 'authentication',
+  name: 'login'
+})
 </script>

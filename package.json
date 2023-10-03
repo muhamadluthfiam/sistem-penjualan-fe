@@ -20,5 +20,9 @@
   },
   "overrides": {
     "vite-plugin-inspect": "0.7.38"
+  },
+  "dependencies": {
+    "@pinia/nuxt": "^0.4.11",
+    "pinia": "^2.1.6"
   }
 }
