@@ -39,39 +39,39 @@
       </div>
 
       <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:gap-11">
-          <div class="card !gap-y-10">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-grey">Total Assets</p>
-                <p class="text-xs text-grey">Rupiah Format</p>
-                <div class="text-[32px] font-bold text-dark mt-[6px]">
-                  425,000
-                </div>
+        <div class="card !gap-y-10">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-grey">Total Assets</p>
+              <p class="text-xs text-grey">Rupiah Format</p>
+              <div class="text-[32px] font-bold text-dark mt-[6px]">
+                425,000
               </div>
             </div>
           </div>
-          <div class="card !gap-y-10">
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-grey">products available</p>
-                  <p class="text-xs text-grey">Ready to sale</p>
-                  <div class="text-[32px] font-bold text-dark mt-[6px]">
-                    205
-                  </div>
-                </div>
-              </div>
-          </div>
-          <div class="card !gap-y-10">
+        </div>
+        <div class="card !gap-y-10">
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-grey">Empty items</p>
-                <p class="text-xs text-grey">Please update stock items</p>
+                <p class="text-grey">products available</p>
+                <p class="text-xs text-grey">Ready to sale</p>
                 <div class="text-[32px] font-bold text-dark mt-[6px]">
-                  1
+                  205
                 </div>
               </div>
             </div>
+        </div>
+        <div class="card !gap-y-10">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-grey">Empty items</p>
+              <p class="text-xs text-grey">Please update stock items</p>
+              <div class="text-[32px] font-bold text-dark mt-[6px]">
+                1
+              </div>
+            </div>
           </div>
+        </div>
       </div>
     </section>
     <section class="pt-[30px]">
@@ -80,32 +80,31 @@
         <div class="flex items-center justify-between gap-6">
           <div>
             <div class="text-xl font-medium text-dark">
-                Table
+              Table
             </div>
           </div>
         </div>
       </div>
-
-      <DynamicTable :columns="tableColumns" :data="tableData"/>
+      <TableProducts :columns="tableColumns" :data="tableData"/>
       
     </section>
   </div>
 </template>
-<script>
-import DynamicTable from '@/components/DynamicTable.vue'
-export default {
-  components: {
-    DynamicTable,
-  },
-  data() {
-    return {
-      tableColumns: ['No', 'Nama', 'Email', 'Telepon'],
-      tableData: [
-        { no: 1, nama: 'John Doe', email: 'john@example.com', telepon: '123-456-7890' },
-        { no: 2, nama: 'Jane Smith', email: 'jane@example.com', telepon: '987-654-3210' },
-        { no: 3, nama: 'Bob Johnson', email: 'bob@example.com', telepon: '555-555-5555' },
-      ],
-    };
-  }
-}
+<script setup>
+
+import { onMounted, ref, onBeforeMount } from 'vue'
+import { storeToRefs } from 'pinia';
+import { useProductStore } from '~/store/product';
+import TableProducts from '@/components/table/TableProducts.vue'
+
+const { getProducts } = useProductStore()
+const router = useRouter()
+const tableColumns = ref(['No', 'Nama', 'Category', 'quantity', 'basic_price', 'selling_price', 'slug', 'actions'])
+const tableData = ref([])
+
+onBeforeMount(async () => {
+  tableData.value = await getProducts()
+})
+
+
 </script>

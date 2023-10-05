@@ -8,5 +8,8 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-  modules: ['@pinia/nuxt']
+  modules: [
+    '@pinia/nuxt',
+    '@invictus.codes/nuxt-vuetify'
+  ]
 })

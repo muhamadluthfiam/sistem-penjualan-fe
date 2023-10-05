@@ -50,21 +50,39 @@
           </div>
         </div>
       </div>
-
       <div class="flex">
-        <table class="min-w-full bg-white">
+        <v-table>
           <thead>
-              <tr>
-                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Nama</th>
-                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Telepon</th>
-              </tr>
+            <tr>
+              <th class="text-left">
+                Name
+              </th>
+            </tr>
           </thead>
-          <tbody id="data-tabel">
-              <!-- Data akan ditampilkan di sini -->
+          <tbody>
+            <tr
+              v-for="item in data"
+              :key="item.name"
+            >
+              <td>{{ item.name }}</td>
+              <td>{{ item.calories }}</td>
+            </tr>
           </tbody>
-        </table>
+        </v-table>
       </div>
     </section>
   </div>
 </template>
+<script setup>
+import { onMounted, ref } from 'vue'
+import { storeToRefs } from 'pinia';
+import { useCategoriesStore } from '~/store/categories';
+
+const { getCategories } = useCategoriesStore()
+const router = useRouter()
+const data = ref([])
+
+onMounted(async () => {
+  data.value = await getCategories()
+})
+</script>

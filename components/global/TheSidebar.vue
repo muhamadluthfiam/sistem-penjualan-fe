@@ -3,13 +3,16 @@
     <div class="px-6 py-[50px] gap-y-[50px] flex flex-col">
       <div class="flex items-center justify-between">
         <NuxtLink to="/">
-          <img src="/svgs/logo-type.svg" alt="">
+          <h3 class="font-bold text-2xl text-center mx-auto font-sans">
+            Jaya Mandiri Part
+          </h3>
+          <!-- <img src="/svgs/logo-type.svg" alt=""> -->
         </NuxtLink>
         <a href="#" id="toggleCloseSidebar" class="lg:hidden">
           <svg class="w-6 h-6 text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-              </path>
+          xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+          </path>
           </svg>
         </a>
       </div>
