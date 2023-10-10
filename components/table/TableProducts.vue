@@ -12,8 +12,8 @@
           <td class="border">{{ row.name }}</td>
           <td class="border">{{ row.category.name }}</td>
           <td class="border">{{ row.quantity }}</td>
-          <td class="border">{{ row.basic_price }}</td>
-          <td class="border">{{ row.selling_price }}</td>
+          <td class="border">Rp.{{ rupiahFormat(row.basic_price) }}</td>
+          <td class="border">Rp.{{ rupiahFormat(row.selling_price) }}</td>
           <td class="border my-2">{{ row.slug }}</td>
           <td class="flex flex-wrap gap-2 justify-center items-center my-2">
             <button @click="deleteTable(row.id)" class="border px-3 py-1 rounded-md bg-red-500 text-white hover:bg-red-400 hover:shadow-md">Delete</button>
@@ -33,14 +33,19 @@ import { onMounted, ref, onBeforeMount, toRef } from 'vue'
 import { storeToRefs } from 'pinia';
 import { useProductStore } from '~/store/product';
 
-const { deleteProducts } = useProductStore()
 const route = useRouter()
 const props = defineProps(['columns', 'data', 'params'])
-
+const store = useProductStore()
 
 const deleteTable = async (val) => {
   await deleteProducts(val)
 }
+
+function rupiahFormat (val) {
+  return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+}
+
+  
 
 </script>
 

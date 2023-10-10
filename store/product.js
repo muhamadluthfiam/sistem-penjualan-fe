@@ -4,7 +4,10 @@ export const useProductStore = defineStore('product', {
   state: () => ({
     data: null,
     loading: false,
-    isSuccess: false
+    isSuccess: false,
+    objectValue: {},
+    basicPrice: [],
+    allQuantity: []
   }),
   actions: {
     async createProducts ({ name, quantity, category_id, basic_price, selling_price, slug }) {
@@ -44,6 +47,13 @@ export const useProductStore = defineStore('product', {
           },
           }),
       );
+      const keyArray = data.value.map(element => element.basic_price)
+      const valueArray = data.value.map(element => element.quantity)
+      for (let i = 0; i < keyArray.length; i++) {
+        const key = keyArray[i];
+        const value = valueArray[i];
+        this.$state.objectValue[key] = value;
+      }
       return data.value
     },
     

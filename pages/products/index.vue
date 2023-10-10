@@ -45,7 +45,7 @@
               <p class="text-grey">Total Assets</p>
               <p class="text-xs text-grey">Rupiah Format</p>
               <div class="text-[32px] font-bold text-dark mt-[6px]">
-                425,000
+               {{ formatRupiah(totalSum) }}
               </div>
             </div>
           </div>
@@ -96,6 +96,7 @@ import { storeToRefs } from 'pinia';
 import { useProductStore } from '~/store/product';
 import TableProducts from '@/components/table/TableProducts.vue'
 
+const store = useProductStore()
 const { getProducts } = useProductStore()
 const router = useRouter()
 const tableColumns = ref(['No', 'Nama', 'Category', 'quantity', 'Price', 'Selling price', 'Slug', 'Actions'])
@@ -104,6 +105,32 @@ const tableData = ref([])
 onMounted(async () => {
   tableData.value = await getProducts()
 })
+
+const basicPrice = store.$state.objectValue
+
+const multipliedObject = ref({});
+
+for (const key in basicPrice) {
+  if (basicPrice.hasOwnProperty(key)) {
+    const value = basicPrice[key];
+    const multipliedValue = parseInt(key) * value; // Mengalikan kunci dengan nilai
+    multipliedObject.value[key] = multipliedValue; // Menyimpan hasilnya dalam objek baru
+  }
+}
+
+let totalSum = 0;
+
+// Melakukan iterasi melalui objek dan menjumlahkan nilai-nilainya
+for (const key in multipliedObject.value) {
+  if (multipliedObject.value.hasOwnProperty(key)) {
+    totalSum += multipliedObject.value[key];
+  }
+}
+
+function rupiahFormat (val) {
+  return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+}
+
 
 
 </script>
