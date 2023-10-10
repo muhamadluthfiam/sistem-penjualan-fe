@@ -86,23 +86,22 @@
         </div>
       </div>
       <TableProducts :columns="tableColumns" :data="tableData"/>
-      
     </section>
   </div>
 </template>
 <script setup>
 
-import { onMounted, ref, onBeforeMount } from 'vue'
+import { onMounted, ref, onBeforeMount, computed, reactive } from 'vue'
 import { storeToRefs } from 'pinia';
 import { useProductStore } from '~/store/product';
 import TableProducts from '@/components/table/TableProducts.vue'
 
 const { getProducts } = useProductStore()
 const router = useRouter()
-const tableColumns = ref(['No', 'Nama', 'Category', 'quantity', 'basic_price', 'selling_price', 'slug', 'actions'])
+const tableColumns = ref(['No', 'Nama', 'Category', 'quantity', 'Price', 'Selling price', 'Slug', 'Actions'])
 const tableData = ref([])
 
-onBeforeMount(async () => {
+onMounted(async () => {
   tableData.value = await getProducts()
 })
 

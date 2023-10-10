@@ -39,7 +39,6 @@
             </option>
             <input type="text" class="bg-transparent">
           </select>
-          {{ selectedCategories }}
         </div>
         <div class="w-full lg:w-3/12 mt-3 lg:mt-0">
           <div class="form-group px-2">
