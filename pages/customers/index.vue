@@ -11,7 +11,7 @@
               </svg>
           </a>
           <div class="text-[32px] font-semibold text-dark">
-              Categories
+              Customers
           </div>
       </div>
       <div class="flex items-center gap-4">
@@ -29,13 +29,13 @@
       <div class="mb-[30px]">
         <div class="flex flex-col justify-between gap-6 sm:items-center sm:flex-row">
           <div>
-            <div class="text-xl font-medium text-dark">
-              List Of Categories
-              <p class="text-sm font-extralight text-slate-400">The Primary Of Categories</p>
-            </div>
+              <div class="text-xl font-medium text-dark">
+                List Of Customers
+                <p class="text-sm font-extralight text-slate-400 italic">The Enterprise Customer</p>
+              </div>
               <!-- <p class="text-grey">Your team powers</p> -->
           </div>
-          <NuxtLink to="/categories/add" class="btn btn-primary">Add Categories</NuxtLink>
+          <NuxtLink to="/customers/add" class="btn btn-primary">Add Customers</NuxtLink>
         </div>
       </div>
     </section>
@@ -48,15 +48,22 @@
               <th class="text-left">
                 Name
               </th>
+              <th class="text-left">
+                Address
+              </th>
+              <th class="text-left">
+                Phone
+              </th>
             </tr>
           </thead>
           <tbody>
             <tr
-              v-for="item in data"
-              :key="item.name"
+              v-for="(item, i) in data"
+              :key="i"
             >
               <td>{{ item.name }}</td>
-              <td>{{ item.calories }}</td>
+              <td>{{ item.address }}</td>
+              <td>{{ item.phone }}</td>
             </tr>
           </tbody>
         </v-table>
@@ -67,13 +74,13 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia';
-import { useCategoriesStore } from '~/store/categories';
+import { useCustomersStore } from '~/store/customers';
 
-const { getCategories } = useCategoriesStore()
+const { getCustomers } = useCustomersStore()
 const router = useRouter()
 const data = ref([])
 
 onMounted(async () => {
-  data.value = await getCategories()
+  data.value = await getCustomers()
 })
 </script>

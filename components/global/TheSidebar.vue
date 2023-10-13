@@ -1,5 +1,5 @@
 <template>
-  <div class="hidden lg:block fixed lg:max-w-[295px] w-full overflow-y-auto h-full bg-white z-[999]" id="sidebarHRIS">
+  <div class="hidden lg:block fixed lg:max-w-[295px] w-full overflow-y-auto h-full bg-white z-10" id="sidebarHRIS">
     <div class="px-6 py-[50px] gap-y-[50px] flex flex-col">
       <div class="flex items-center justify-between">
         <NuxtLink to="/">
@@ -40,6 +40,10 @@
         <NuxtLink to="/categories" class="nav-link">
           <img src="/svgs/ic-category.svg" alt="">
           Categories
+        </NuxtLink>
+        <NuxtLink to="/customers" class="nav-link">
+          <img src="/svgs/ic-users.svg" alt="">
+          Customers
         </NuxtLink>
         <NuxtLink to="/unit" class="nav-link">
           <img src="/svgs/ic-stack.svg" alt="">

@@ -30,9 +30,9 @@
         <div class="flex flex-col justify-between gap-6 sm:items-center sm:flex-row">
           <div>
             <div class="text-xl font-medium text-dark">
-                Statistics
+              List Of Products
+              <p class="text-sm font-extralight text-slate-400 italic">Enpower your products</p>
             </div>
-            <!-- <p class="text-grey">Your team powers</p> -->
           </div>
           <NuxtLink to="/products/add" class="btn btn-primary">Add Product</NuxtLink>
         </div>
@@ -75,16 +75,6 @@
       </div>
     </section>
     <section class="pt-[30px]">
-        <!-- Section Table -->
-      <div class="">
-        <div class="flex items-center justify-between gap-6">
-          <div>
-            <div class="text-xl font-medium text-dark">
-              Table
-            </div>
-          </div>
-        </div>
-      </div>
       <TableProducts :columns="tableColumns" :data="tableData"/>
     </section>
   </div>
@@ -99,7 +89,7 @@ import TableProducts from '@/components/table/TableProducts.vue'
 const store = useProductStore()
 const { getProducts } = useProductStore()
 const router = useRouter()
-const tableColumns = ref(['No', 'Nama', 'Category', 'quantity', 'Price', 'Selling price', 'Slug', 'Actions'])
+const tableColumns = ref(['No', 'Nama', 'Category', 'Quantity', 'Price', 'Selling price', 'Slug'])
 const tableData = ref([])
 
 onMounted(async () => {
@@ -107,7 +97,6 @@ onMounted(async () => {
 })
 
 const basicPrice = store.$state.objectValue
-
 const multipliedObject = ref({});
 
 for (const key in basicPrice) {
@@ -120,7 +109,6 @@ for (const key in basicPrice) {
 
 let totalSum = 0;
 
-// Melakukan iterasi melalui objek dan menjumlahkan nilai-nilainya
 for (const key in multipliedObject.value) {
   if (multipliedObject.value.hasOwnProperty(key)) {
     totalSum += multipliedObject.value[key];
@@ -128,7 +116,9 @@ for (const key in multipliedObject.value) {
 }
 
 function rupiahFormat (val) {
-  return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+  if (val) {
+    return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+  }
 }
 
 
