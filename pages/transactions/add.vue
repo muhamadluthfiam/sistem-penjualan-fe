@@ -1,11 +1,11 @@
 <template>
   <section class="py-[20px] w-full items-center justify-center px-4">
     <div class="text-[32px] font-semibold text-dark mb-[30px]">
-      Add Products
+      Add Transactions
     </div>
     <form @submit.prevent="addProduct()" class="w-full flex flex-col card">
       <div class="flex flex-wrap">
-        <div class="w-full lg:w-1/2 mt-3 lg:mt-0">
+        <!-- <div class="w-full lg:w-1/2 mt-3 lg:mt-0">
           <div class="form-group px-2">
             <label for="" class="text-grey">Product Name</label>
             <input v-model="product.name" type="text" class="input-field">
@@ -16,7 +16,7 @@
             <label for="" class="text-grey">Quantity</label>
             <input v-model="product.quantity" type="number" class="input-field">
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="flex flex-wrap lg:mt-4">
         <div class="w-full lg:w-3/12 mt-3 lg:mt-0">

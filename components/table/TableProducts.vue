@@ -47,9 +47,9 @@ import { onMounted, ref, onBeforeMount, toRef } from 'vue'
 import { storeToRefs } from 'pinia';
 import { useProductStore } from '~/store/product';
 
+const productStore = useProductStore()
 const route = useRouter()
 const props = defineProps(['columns', 'data'])
-const store = useProductStore()
 const { deleteProducts, getProducts } = useProductStore()
 const itemToDelete = ref(null)
 
@@ -61,7 +61,7 @@ const confirmDelete = async () => {
   if (itemToDelete.value) {
     const response = await deleteProducts(itemToDelete.value.id)
     if (response === 'success') {
-      props.data = await getProducts();
+      productStore.getProducts()
     }
     itemToDelete.value = null
   }

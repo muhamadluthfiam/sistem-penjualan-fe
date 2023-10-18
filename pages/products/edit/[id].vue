@@ -63,6 +63,7 @@ const { getCategories } = useCategoriesStore()
 const categories = ref([])
 const selectedCategories = ref({})
 
+const router = useRouter()
 const route = useRoute()
 const product = reactive({
   name: '',
@@ -84,7 +85,6 @@ onBeforeMount(async () => {
 
 async function getData() {
   const productData = await showProduct(route.params.id)
-  console.log(productData.slug)
   if (productData) {
     product.name = productData.name
     product.quantity = productData.quantity
@@ -99,6 +99,7 @@ const updateData = async () => {
   const target = ref(Object.assign(product, { category_id: selectedCategories.value.id})) 
   // console.log(target.value)
   await updateProduct(route.params.id, target.value)
+  router.back()
 }
 
 

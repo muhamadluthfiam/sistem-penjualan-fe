@@ -75,7 +75,47 @@
       </div>
     </section>
     <section class="pt-[30px]">
-      <TableProducts :columns="tableColumns" :data="tableData"/>
+      <div class="card">
+        <table class="w-full">
+          <thead class="border-y-2 px-2">
+            <tr>
+              <th class="text-left font-thin text-slate-800" v-for="column in tableColumns" :key="column">{{ column }}</th>
+            </tr>
+          </thead>
+          <tbody v-if="tableData">
+            <tr v-for="(row, index) in tableData" :key="index">
+              <td>{{ index + 1 }}</td>
+              <td>{{ row.name }}</td>
+              <td>{{ row.category.name }}</td>
+              <td>{{ row.quantity }}</td>
+              <td>Rp.{{ rupiahFormat(row.basic_price) }}</td>
+              <td>Rp.{{ rupiahFormat(row.selling_price) }}</td>
+              <td>{{ row.slug }}</td>
+              <td class="flex flex-wrap flex-col gap-2 my-8">
+                <button @click="itemToDelete = row" type="button" class="border px-3 py-1 rounded-md hover:bg-red-400 hover:text-white hover:shadow-md">Delete</button>
+                <nuxt-link :to="'/products/edit/' + row.id" class="border px-3 py-1 rounded-md bg-green-500 text-white hover:bg-green-400 hover:shadow-md text-center">Edit</nuxt-link>
+              </td>
+              <!-- <td v-for="(value, key) in row" :key="key" :class="[key === 'no' ? 'text-center' : '']">
+                {{ value }}
+              </td> -->
+            </tr>
+          </tbody>
+        </table>
+        <div v-if="itemToDelete" class="fixed inset-0 flex items-center justify-center z-20">
+          <div @click="cancelDelete" class="cursor-pointer fixed inset-0 z-10 bg-gray-800 bg-opacity-60"></div>
+
+          <div class="relative z-20 bg-white rounded-md flex flex-wrap gap-20 p-4 hover:shadow-white shadow-2xl">
+            <div class="w-28">
+              <p class="font-sans text-5xl font-semibold">ARE YOU SURE DELETE DATA ?</p>
+            </div>
+            <div class="mt-4 flex flex-col-reverse justify-center items-center gap-4">
+              <!-- <button @click="cancelDelete" class="px-4 py-2 mr-2 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md">Cancel</button> -->
+              <button @click="cancelDelete" class="px-4 py-2 text-green-500 bg-green-300 hover:bg-green-400 hover:text-green-600 rounded-md hover:shadow-md hover:underline ease-out duration-500">Cancel</button>
+              <button @click="confirmDelete" class="px-4 py-2 text-red-500 bg-red-300 hover:bg-red-400 hover:text-red-600 rounded-md hover:shadow-md hover:underline ease-out duration-500">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   </div>
 </template>
@@ -86,32 +126,28 @@ import { storeToRefs } from 'pinia';
 import { useProductStore } from '~/store/product';
 import TableProducts from '@/components/table/TableProducts.vue'
 
-const store = useProductStore()
-const { getProducts } = useProductStore()
+const productStore = useProductStore()
+const { deleteProducts, getProducts } = useProductStore()
 const router = useRouter()
 const tableColumns = ref(['No', 'Nama', 'Category', 'Quantity', 'Price', 'Selling price', 'Slug'])
 const tableData = ref([])
+const itemToDelete = ref(null)
 
 onMounted(async () => {
-  tableData.value = await getProducts()
+  await productStore.getProducts()
+  tableData.value = productStore.data
 })
 
-const basicPrice = store.$state.objectValue
-const multipliedObject = ref({});
-
-for (const key in basicPrice) {
-  if (basicPrice.hasOwnProperty(key)) {
-    const value = basicPrice[key];
-    const multipliedValue = parseInt(key) * value; // Mengalikan kunci dengan nilai
-    multipliedObject.value[key] = multipliedValue; // Menyimpan hasilnya dalam objek baru
-  }
+const cancelDelete = () => {
+  itemToDelete.value = null;
 }
 
-let totalSum = 0;
-
-for (const key in multipliedObject.value) {
-  if (multipliedObject.value.hasOwnProperty(key)) {
-    totalSum += multipliedObject.value[key];
+const confirmDelete = async () => {
+  if (itemToDelete.value) {
+    await deleteProducts(itemToDelete.value.id)
+    await productStore.getProducts()
+    tableData.value = productStore.data
+    itemToDelete.value = null
   }
 }
 
@@ -120,7 +156,6 @@ function rupiahFormat (val) {
     return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
   }
 }
-
 
 
 </script>
