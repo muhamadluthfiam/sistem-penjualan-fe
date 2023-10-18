@@ -49,9 +49,9 @@
           <img src="/svgs/ic-stack.svg" alt="">
           Unit
         </NuxtLink>
-        <NuxtLink to="/transactions" class="nav-link">
+        <NuxtLink to="/orders" class="nav-link">
           <img src="/svgs/ic-transaction.svg" alt="">
-          Transactions
+          Orders
         </NuxtLink>
         <NuxtLink to="/settings" class="nav-link">
           <img src="/svgs/ic-settings.svg" alt="">

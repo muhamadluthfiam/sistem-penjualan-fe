@@ -11,7 +11,7 @@
               </svg>
           </a>
           <div class="text-[32px] font-semibold text-dark">
-              Products
+            Transactions of
           </div>
       </div>
       <div class="flex items-center gap-4">
@@ -26,8 +26,8 @@
         <div class="flex flex-col justify-between gap-6 sm:items-center sm:flex-row">
           <div>
             <div class="text-xl font-medium text-dark">
-              List Of Transactions
-              <p class="text-sm font-extralight text-slate-400 italic">Engage your transactions</p>
+              List Of Orders
+              <p class="text-sm font-extralight text-slate-400 italic">Manage your orders</p>
             </div>
           </div>
           <NuxtLink to="/transactions/add" class="btn btn-primary">Add Transaction</NuxtLink>
@@ -70,7 +70,7 @@
         </div>
       </div>
     </section>
-    <!-- <section class="pt-[30px]">
+    <section class="pt-[30px]">
       <div class="card">
         <table class="w-full">
           <thead class="border-y-2 px-2">
@@ -78,19 +78,26 @@
               <th class="text-left font-thin text-slate-800" v-for="column in tableColumns" :key="column">{{ column }}</th>
             </tr>
           </thead>
-          <tbody v-if="tableData">
-            <tr v-for="(row, index) in tableData" :key="index">
+          <tbody>
+            <tr v-for="(row, index) in store.transactions" :key="index" class="cursor-pointer" @click="getTransactions(row.id)">
               <td>{{ index + 1 }}</td>
-              <td>{{ row.name }}</td>
-              <td>{{ row.category.name }}</td>
+              <td>{{ row.product_name }}</td>
               <td>{{ row.quantity }}</td>
-              <td>Rp.{{ rupiahFormat(row.basic_price) }}</td>
-              <td>Rp.{{ rupiahFormat(row.selling_price) }}</td>
-              <td>{{ row.slug }}</td>
+              <td>Rp. {{ rupiahFormat(row.price) }}</td>
+              <td>Rp. {{ rupiahFormat(row.price * row.quantity) }}</td>
+              <td>{{ row.customer.address }}</td>
+              <td>{{ row.customer.phone }}</td>
               <td class="flex flex-wrap flex-col gap-2 my-8">
-                <button @click="itemToDelete = row" type="button" class="border px-3 py-1 rounded-md hover:bg-red-400 hover:text-white hover:shadow-md">Delete</button>
-                <nuxt-link :to="'/products/edit/' + row.id" class="border px-3 py-1 rounded-md bg-green-500 text-white hover:bg-green-400 hover:shadow-md text-center">Edit</nuxt-link>
+                <!-- <button @click="itemToDelete = row" type="button" class="border px-3 py-1 rounded-md hover:bg-red-400 hover:text-white hover:shadow-md">Delete</button> -->
+                <!-- <nuxt-link :to="'/products/edit/' + row.id" class="border px-3 py-1 rounded-md bg-green-500 text-white hover:bg-green-400 hover:shadow-md text-center">Edit</nuxt-link> -->
               </td>
+            </tr>
+            <tr class="border border-t-2 border-black">
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="font-bold text-xl">Total</td>
+              <td class="font-bold text-xl">Rp. {{ total() }}</td>
             </tr>
           </tbody>
         </table>
@@ -108,9 +115,56 @@
           </div>
         </div>
       </div>
-    </section> -->
+    </section>
   </div>
 </template>
 <script setup>
+import { onMounted, ref, onBeforeMount, computed, reactive } from 'vue'
+import { storeToRefs } from 'pinia';
+import { useTransactionsStore } from '~/store/transaction';
+import TableProducts from '@/components/table/TableProducts.vue'
 
+const store = useTransactionsStore()
+const { getTranscations, getOrderTransactions } = useTransactionsStore()
+const route = useRoute()
+const tableColumns = ref(['No', 'Name', 'Quantity', 'Price', 'Sub Total'])
+const tableData = ref([])
+const ordersData = ref([])
+const itemToDelete = ref(null)
+let calculateTotal = 0
+
+onMounted(async () => {
+  await store.getTranscations(route.params.id)
+})
+
+const total = () => {
+  for (let index = 0; index < tableData.value.length; index++) {
+    const val = tableData.value[index];
+    calculateTotal += val.price * val.quantity
+  }
+  return rupiahFormat(calculateTotal)
+}
+
+const cancelDelete = () => {
+  itemToDelete.value = null;
+}
+
+const confirmDelete = async () => {
+  // if (itemToDelete.value) {
+  //   await deleteProducts(itemToDelete.value.id)
+  //   await productStore.getProducts()
+  //   tableData.value = productStore.data
+  //   itemToDelete.value = null
+  // }
+}
+
+function rupiahFormat (val) {
+  if (val) {
+    return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+  }
+}
+
+definePageMeta({
+  layout: 'transaction',
+})
 </script>

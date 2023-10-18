@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 export const useProductStore = defineStore('product', {
   state: () => ({
     data: [],
+    products: [],
     loading: false,
     isSuccess: false,
     objectValue: {},
@@ -47,7 +48,8 @@ export const useProductStore = defineStore('product', {
           },
           }),
       );
-      this.data = data
+      this.products = data.value
+      // this.data = data
     },
     
     async deleteProducts (id) {

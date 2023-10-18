@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 
 export const useCustomersStore = defineStore('customer', {
   state: () => ({
-    data: null,
+    customers: [],
     loading: false,
     isSuccess: false
   }),
@@ -37,7 +37,10 @@ export const useCustomersStore = defineStore('customer', {
           'Authorization': `Bearer ${cookie.value.token}`
         },
       })
-      return data.value
+      this.customers =  data.value
     }
+  },
+  getters: {
+    getData: (state) => state.data = state.data
   }
 })

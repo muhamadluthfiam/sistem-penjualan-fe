@@ -11,14 +11,10 @@
               </svg>
           </a>
           <div class="text-[32px] font-semibold text-dark">
-              Products
+            Orders
           </div>
       </div>
       <div class="flex items-center gap-4">
-        <!-- <form class="shrink md:w-[516px] w-full">
-          <input type="text" name="" id="" class="input-field !outline-none !border-none italic form-icon-search ring-indigo-200
-                focus:ring-2 transition-all duration-300 w-full" placeholder="Search people, team, project">
-        </form> -->
         <a href="#"
           class="flex-none w-[46px] h-[46px] bg-white rounded-full p-[11px] relative notification-dot">
           <img src="../assets/svgs/ic-bell.svg" alt="">
@@ -30,11 +26,11 @@
         <div class="flex flex-col justify-between gap-6 sm:items-center sm:flex-row">
           <div>
             <div class="text-xl font-medium text-dark">
-              List Of Products
-              <p class="text-sm font-extralight text-slate-400 italic">Enpower your products</p>
+              List Of Orders
+              <p class="text-sm font-extralight text-slate-400 italic">Manage your orders</p>
             </div>
           </div>
-          <NuxtLink to="/products/add" class="btn btn-primary">Add Product</NuxtLink>
+          <NuxtLink to="/orders/add" class="btn btn-primary">Add Order</NuxtLink>
         </div>
       </div>
 
@@ -83,21 +79,15 @@
             </tr>
           </thead>
           <tbody v-if="tableData">
-            <tr v-for="(row, index) in productStore.products" :key="index">
+            <tr v-for="(row, index) in tableData" :key="index" class="cursor-pointer" @click="getTransactions(row.id)">
               <td>{{ index + 1 }}</td>
-              <td>{{ row.name }}</td>
-              <td>{{ row.category.name }}</td>
-              <td>{{ row.quantity }}</td>
-              <td>Rp.{{ rupiahFormat(row.basic_price) }}</td>
-              <td>Rp.{{ rupiahFormat(row.selling_price) }}</td>
-              <td>{{ row.slug }}</td>
+              <td>{{ row.order_date }}</td>
+              <td>{{ row.customer.name }}</td>
+              <td>{{ row.customer.address }}</td>
+              <td>{{ row.customer.phone }}</td>
               <td class="flex flex-wrap flex-col gap-2 my-8">
-                <button @click="itemToDelete = row" type="button" class="border px-3 py-1 rounded-md hover:bg-red-400 hover:text-white hover:shadow-md">Delete</button>
-                <nuxt-link :to="'/products/edit/' + row.id" class="border px-3 py-1 rounded-md bg-green-500 text-white hover:bg-green-400 hover:shadow-md text-center">Edit</nuxt-link>
+                <nuxt-link :to="'/orders/transactions/' + row.id" class="border px-3 py-1 rounded-md bg-green-500 text-white hover:bg-green-400 hover:shadow-md text-center">Detail</nuxt-link>
               </td>
-              <!-- <td v-for="(value, key) in row" :key="key" :class="[key === 'no' ? 'text-center' : '']">
-                {{ value }}
-              </td> -->
             </tr>
           </tbody>
         </table>
@@ -109,7 +99,6 @@
               <p class="font-sans text-5xl font-semibold">ARE YOU SURE DELETE DATA ?</p>
             </div>
             <div class="mt-4 flex flex-col-reverse justify-center items-center gap-4">
-              <!-- <button @click="cancelDelete" class="px-4 py-2 mr-2 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md">Cancel</button> -->
               <button @click="cancelDelete" class="px-4 py-2 text-green-500 bg-green-300 hover:bg-green-400 hover:text-green-600 rounded-md hover:shadow-md hover:underline ease-out duration-500">Cancel</button>
               <button @click="confirmDelete" class="px-4 py-2 text-red-500 bg-red-300 hover:bg-red-400 hover:text-red-600 rounded-md hover:shadow-md hover:underline ease-out duration-500">Delete</button>
             </div>
@@ -120,34 +109,38 @@
   </div>
 </template>
 <script setup>
-
 import { onMounted, ref, onBeforeMount, computed, reactive } from 'vue'
 import { storeToRefs } from 'pinia';
-import { useProductStore } from '~/store/product';
+import { useOrdersStore } from '~/store/order';
 import TableProducts from '@/components/table/TableProducts.vue'
 
-const productStore = useProductStore()
-const { deleteProducts, getProducts } = useProductStore()
+const store = useOrdersStore()
+const { getOrder } = useOrdersStore()
 const router = useRouter()
-const tableColumns = ref(['No', 'Nama', 'Category', 'Quantity', 'Price', 'Selling price', 'Slug'])
+const tableColumns = ref(['No', 'Order Date', 'Name', 'Address', 'Phone'])
 const tableData = ref([])
 const itemToDelete = ref(null)
 
 onMounted(async () => {
-  await productStore.getProducts()
-  tableData.value = productStore.data
+  await getOrder()
+  tableData.value = store.data
 })
+
+const getTransactions = (id) => {
+  router.push({ path: `/orders/transactions/` + id })
+}
 
 const cancelDelete = () => {
   itemToDelete.value = null;
 }
 
 const confirmDelete = async () => {
-  if (itemToDelete.value) {
-    await deleteProducts(itemToDelete.value.id)
-    await productStore.getProducts()
-    itemToDelete.value = null
-  }
+  // if (itemToDelete.value) {
+  //   await deleteProducts(itemToDelete.value.id)
+  //   await productStore.getProducts()
+  //   tableData.value = productStore.data
+  //   itemToDelete.value = null
+  // }
 }
 
 function rupiahFormat (val) {
@@ -157,4 +150,7 @@ function rupiahFormat (val) {
 }
 
 
+definePageMeta({
+  layout: 'transaction',
+})
 </script>

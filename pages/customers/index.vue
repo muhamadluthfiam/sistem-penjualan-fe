@@ -58,7 +58,7 @@
           </thead>
           <tbody>
             <tr
-              v-for="(item, i) in data"
+              v-for="(item, i) in storeCustomer.customers"
               :key="i"
             >
               <td>{{ item.name }}</td>
@@ -76,11 +76,10 @@ import { onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia';
 import { useCustomersStore } from '~/store/customers';
 
-const { getCustomers } = useCustomersStore()
+const storeCustomer = useCustomersStore()
 const router = useRouter()
-const data = ref([])
 
 onMounted(async () => {
-  data.value = await getCustomers()
+  storeCustomer.getCustomers()
 })
 </script>
