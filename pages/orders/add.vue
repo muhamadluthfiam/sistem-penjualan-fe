@@ -257,7 +257,7 @@ const storeOrder = useOrdersStore()
 const storeCustomer = useCustomersStore()
 const { getCustomers } = useCustomersStore()
 const { getOrder, createOrder} = useOrdersStore()
-const { createTransaction } = useTransactionsStore()
+const { createTransaction, createOrderDetail } = useTransactionsStore()
 const selectCustomer = ref({})
 const product = ref([])
 const date =  ref('')
@@ -403,8 +403,8 @@ const printAndProceed = async () => {
     onInvoiceProduct.value.push(data)
   })
   const api = await createTransaction(orderId.value, onInvoiceProduct.value)
-
-  if (receiptContent || api) {
+  const orderDetail = await createOrderDetail(orderId.value, onInvoiceProduct.value)
+  if (receiptContent || api || orderDetail) {
     printArea.innerHTML = receiptContent.innerHTML
     document.title = receiptNo.value
     window.print()

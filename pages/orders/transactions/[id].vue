@@ -72,6 +72,7 @@
     </section>
     <section class="pt-[30px]">
       <div class="card">
+        {{ tableData[0] }}
         <table class="w-full">
           <thead class="border-y-2 px-2">
             <tr>
@@ -79,14 +80,14 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(row, index) in store.transactions" :key="index" class="cursor-pointer" @click="getTransactions(row.id)">
+            <tr v-for="(row, index) in storeTransactions.orderDetails" :key="index" class="cursor-pointer" @click="getTransactions(row.id)">
               <td>{{ index + 1 }}</td>
-              <td>{{ row.product_name }}</td>
+              <td>{{ row.product }}</td>
               <td>{{ row.quantity }}</td>
               <td>Rp. {{ rupiahFormat(row.price) }}</td>
               <td>Rp. {{ rupiahFormat(row.price * row.quantity) }}</td>
-              <td>{{ row.customer.address }}</td>
-              <td>{{ row.customer.phone }}</td>
+              <!-- <td>{{ row.customer.address }}</td> -->
+              <!-- <td>{{ row.customer.phone }}</td> -->
               <td class="flex flex-wrap flex-col gap-2 my-8">
                 <!-- <button @click="itemToDelete = row" type="button" class="border px-3 py-1 rounded-md hover:bg-red-400 hover:text-white hover:shadow-md">Delete</button> -->
                 <!-- <nuxt-link :to="'/products/edit/' + row.id" class="border px-3 py-1 rounded-md bg-green-500 text-white hover:bg-green-400 hover:shadow-md text-center">Edit</nuxt-link> -->
@@ -97,7 +98,7 @@
               <td></td>
               <td></td>
               <td class="font-bold text-xl">Total</td>
-              <td class="font-bold text-xl">Rp. {{ total() }}</td>
+              <td class="font-bold text-xl">Rp. {{ getTotalPrice() }}</td>
             </tr>
           </tbody>
         </table>
@@ -122,10 +123,13 @@
 import { onMounted, ref, onBeforeMount, computed, reactive } from 'vue'
 import { storeToRefs } from 'pinia';
 import { useTransactionsStore } from '~/store/transaction';
+import { useOrdersStore } from '~/store/order'
 import TableProducts from '@/components/table/TableProducts.vue'
 
-const store = useTransactionsStore()
-const { getTranscations, getOrderTransactions } = useTransactionsStore()
+const store = useOrdersStore()
+const storeTransactions = useTransactionsStore()
+const { getTranscations, getOrderTransactions, getOrderDetailTransactions } = useTransactionsStore()
+const { showOrder } = useOrdersStore()
 const route = useRoute()
 const tableColumns = ref(['No', 'Name', 'Quantity', 'Price', 'Sub Total'])
 const tableData = ref([])
@@ -134,7 +138,7 @@ const itemToDelete = ref(null)
 let calculateTotal = 0
 
 onMounted(async () => {
-  await store.getTranscations(route.params.id)
+  await getOrderDetailTransactions(route.params.id)
 })
 
 const total = () => {
@@ -143,6 +147,13 @@ const total = () => {
     calculateTotal += val.price * val.quantity
   }
   return rupiahFormat(calculateTotal)
+}
+
+const getTotalPrice = () => {
+  return storeTransactions.orderDetails.reduce(
+    (total, item) => total + item.quantity * item.price,
+    0
+  )
 }
 
 const cancelDelete = () => {
