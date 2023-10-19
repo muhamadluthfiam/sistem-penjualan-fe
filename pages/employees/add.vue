@@ -9,27 +9,38 @@
     </p>
     <form class="w-full card">
         <div class="form-group">
-            <label for="" class="text-grey">Complete Name</label>
-            <input type="text" class="input-field">
+					<label for="" class="text-grey">Username</label>
+					<input type="text" v-model="user.username" class="input-field">
         </div>
         <div class="form-group">
-            <label for="" class="text-grey">Email Address</label>
-            <input type="email" class="input-field">
-        </div>
-        <div class="form-group">
-            <label for="" class="text-grey">Gender</label>
-            <select name="" id="" class="appearance-none input-field form-icon-chevron_down">
-                <option value="" selected>Male</option>
-                <option value="">Female</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="" class="text-grey">Age</label>
-            <input type="number" class="input-field">
-        </div>
-        <a href="employee_create-2.html" class="w-full btn btn-primary mt-[14px]">
+					<label for="" class="text-grey">Email Address</label>
+					<input v-model="user.email" type="email" class="input-field">
+				</div>
+				<div class="form-group">
+					<label for="" class="text-grey">Password</label>
+					<input v-model="user.password" type="password" class="input-field">
+				</div>
+        <button @click="login" type="button" class="w-full btn btn-primary mt-[14px]">
             Continue
-        </a>
+        </button>
     </form>
   </section>
 </template>
+<script setup>
+import { ref } from 'vue'
+import { storeToRefs } from 'pinia';
+import { useUsersStore } from '~/store/users';
+
+const { createUser } = useUsersStore()
+const router = useRouter()
+
+const user = ref({
+	username: '',
+	email: '',
+	password: '',
+});
+
+const login = async () => {
+  await createUser(user.value)
+}
+</script>
