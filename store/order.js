@@ -13,7 +13,7 @@ export const useOrdersStore = defineStore('order', {
   actions: {
     async createOrder ( customer_id, order_date ) {
       const cookie = useCookie('token')
-      const { data, pending } = await useFetch('http://127.0.0.1:3333/api/v1/order', {
+      const { data } = await useFetch('http://127.0.0.1:3333/api/v1/order', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -24,11 +24,7 @@ export const useOrdersStore = defineStore('order', {
           order_date: order_date
         }
       })
-      this.loading = pending
-      
-      if (data.value) {
-        this.isSuccess = true
-      }
+      return data
     },
     
     async getOrder () {
@@ -44,7 +40,7 @@ export const useOrdersStore = defineStore('order', {
         }
       }))
       this.data = data
-    }
+    },
     
     // async deleteProducts (id) {
     //   const cookie = await useCookie('token')
@@ -61,20 +57,20 @@ export const useOrdersStore = defineStore('order', {
     //   return status
     // },
 
-    // async showProduct (id) {
-    //   const cookie = useCookie('token')
-    //   const { data, pending } = await useFetch(`http://127.0.0.1:3333/api/v1/products/${id}`, {
-    //     method: 'GET',
-    //     headers: { 
-    //       'Content-Type': 'application/json',
-    //       'Authorization': `Bearer ${cookie.value.token}`
-    //     },
-    //     onResponse({ request, response }) {
-    //       console.log(response)
-    //     }
-    //   })
-    //   return data.value
-    // },
+    async showOrder (id) {
+      const cookie = useCookie('token')
+      const { data, pending } = await useFetch(`http://127.0.0.1:3333/api/v1/order/${id}`, {
+        method: 'GET',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${cookie.value.token}`
+        },
+        onResponse({ request, response }) {
+          console.log(response)
+        }
+      })
+      return data.value
+    },
 
     // async updateProduct (id ,{ name, quantity, category_id, basic_price, selling_price, slug }) {
     //   const cookie = useCookie('token')

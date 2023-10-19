@@ -11,29 +11,30 @@ export const useTransactionsStore = defineStore('transactions', {
     allQuantity: []
   }),
   actions: {
-    // async createProducts ({ name, quantity, category_id, basic_price, selling_price, slug }) {
-    //   const cookie = useCookie('token')
-    //   const { data, pending } = await useFetch('http://127.0.0.1:3333/api/v1/products', {
-    //     method: 'POST',
-    //     headers: { 
-    //       'Content-Type': 'application/json',
-    //       'Authorization': `Bearer ${cookie.value.token}`
-    //     },
-    //     body: {
-    //       name,
-    //       quantity,
-    //       category_id,
-    //       basic_price,
-    //       selling_price,
-    //       slug
-    //     }
-    //   })
-    //   this.loading = pending
+    async createTransaction (order_id, product) {
+      try {
+        const cookie = useCookie('token')
+        const { data, pending } = await useFetch('http://127.0.0.1:3333/api/v1/transaction', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${cookie.value.token}`
+          },
+          body: {
+            order_id : order_id,
+            product: product
+          }
+        })
+        this.loading = pending
+        
+        if (data.value) {
+          this.isSuccess = true
+        }
+      } catch (error) {
+        
+      }
       
-    //   if (data.value) {
-    //     this.isSuccess = true
-    //   }
-    // },
+    },
 
     async getTranscations (id) {
       const cookie = await useCookie('token')
