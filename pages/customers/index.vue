@@ -2,14 +2,14 @@
   <div>
     <section class="flex flex-col flex-wrap justify-between gap-6 md:items-center md:flex-row">
       <div class="flex items-center justify-between gap-4">
-          <a href="#" id="toggleOpenSidebar" class="lg:hidden">
-              <svg class="w-6 h-6 text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M4 6h16M4 12h16M4 18h7">
-                  </path>
-              </svg>
-          </a>
+          <button @click="isOpen = !isOpen">
+            <svg class="w-6 h-6 text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h7">
+              </path>
+            </svg>
+          </button>
           <div class="text-[32px] font-semibold text-dark">
               Customers
           </div>
@@ -42,44 +42,99 @@
     <section class="pt-[30px]">
         <!-- Section Header -->
       <div class="flex">
-        <v-table class="w-full">
-          <thead>
-            <tr>
-              <th class="text-left">
-                Name
-              </th>
-              <th class="text-left">
-                Address
-              </th>
-              <th class="text-left">
-                Phone
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="(item, i) in storeCustomer.customers"
-              :key="i"
-            >
-              <td>{{ item.name }}</td>
-              <td>{{ item.address }}</td>
-              <td>{{ item.phone }}</td>
-            </tr>
-          </tbody>
-        </v-table>
+        <div v-if="itemToDelete" class="fixed inset-0 flex items-center justify-center z-20">
+          <div @click="cancelDelete" class="cursor-pointer fixed inset-0 z-10 bg-gray-800 bg-opacity-60"></div>
+          <div class="relative z-20 bg-white rounded-md flex flex-wrap gap-20 p-4 hover:shadow-white shadow-2xl">
+            <div class="w-28">
+              <p class="font-sans text-5xl font-semibold">ARE YOU SURE DELETE DATA ?</p>
+            </div>
+            <div class="mt-4 flex flex-col-reverse justify-center items-center gap-4">
+              <button @click="cancelDelete" class="px-4 py-2 mr-2 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md">Cancel</button>
+              <button @click="cancelDelete" class="px-4 py-2 text-green-500 bg-green-300 hover:bg-green-400 hover:text-green-600 rounded-md hover:shadow-md hover:underline ease-out duration-500">Cancel</button>
+              <button @click="confirmDelete" class="px-4 py-2 text-red-500 bg-red-300 hover:bg-red-400 hover:text-red-600 rounded-md hover:shadow-md hover:underline ease-out duration-500">Delete</button>
+            </div>
+          </div>
+        </div>
+        <div id="myGrid"></div>
       </div>
     </section>
   </div>
 </template>
 <script setup>
+import { Grid, h } from 'gridjs'
+import "gridjs/dist/theme/mermaid.css";
 import { onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia';
-import { useCustomersStore } from '~/store/customers';
+import { useUtilsStore } from '~/store/utils';
 
-const storeCustomer = useCustomersStore()
+
+const { isOpen } = storeToRefs(useUtilsStore());
+
 const router = useRouter()
+const cookie = useCookie('token')
+const itemToDelete = ref(null)
+
 
 onMounted(async () => {
-  storeCustomer.getCustomers()
+  const response = await fetch('http://127.0.0.1:3333/api/customer', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${cookie.value}`
+    }
+  })
+  if (response.status === 200) {
+    const data = await response.json()
+    new Grid({
+      autoWidth: true,
+      pagination: {
+        limit: data.data.meta.per_page,
+        server: {
+          url: (prev, page, limit) => `${prev}?perPage=${limit}&page=${page + 1}`
+        }
+      },
+      width: '100%',
+      search: true,
+      sort: true,
+      autoWidth: true,
+      fixedHeader: true,
+      resizable: true,
+      columns: [{ name: 'id', hidden:true }, 'Name', 'Address', 'Phone', { name: 'is_member', hidden:true } , 
+        { 
+          name: 'Actions',
+          formatter: (cell, row) => {
+            return h('button', {
+              className: 'py-2 mb-4 px-4 border rounded-md text-white bg-blue-600',
+              onClick: () => {
+                  router.push({ path: `/customers/edit/` + row.cells[0].data })
+              }
+            }, 'Edit')
+          }
+        },
+        { 
+          formatter: (cell, row) => {
+            return h('button', {
+              className: 'py-2 px-4 border rounded-md text-white bg-red-600',
+              onClick: () => {
+                  itemToDelete = true
+              }
+            }, 'Delete')
+          }
+        },
+      ],
+      server: {
+        url: 'http://127.0.0.1:3333/api/customer',
+        then: data => data.data.data.map(data => 
+          [ data.id, data.name, data.address, data.phone, data.is_member ]
+        ),
+        total: data => data.data.meta.total,
+        headers: {
+          Authorization: `Bearer ${cookie.value}`
+        },
+      },
+    }).render(document.getElementById('myGrid'))
+  }
 })
+
+
+
 </script>

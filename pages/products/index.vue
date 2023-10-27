@@ -111,8 +111,6 @@ const itemToDelete = ref(null)
 const cookie = useCookie('token')
 
 onMounted(async () => {
-  await productStore.getProducts()
-  tableData.value = productStore.products.data
   const response = await fetch('http://127.0.0.1:3333/api/products?page=10', {
     method: 'GET',
     headers: {
@@ -141,7 +139,10 @@ onMounted(async () => {
           formatter: (cell, row) => {
             return h('button', {
               className: 'py-2 mb-4 px-4 border rounded-md text-white bg-blue-600',
-              onClick: () => console.log(row.cells)
+              onClick: () => {
+                  console.log(row.cells[0].data)
+                  router.push({ path: `/products/edit/` + row.cells[0].data })
+              }
             }, 'Edit');
           }
         },
@@ -175,12 +176,6 @@ const confirmDelete = async () => {
 function rupiahFormat (val) {
   if (val) {
     return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
-  }
-}
-
-function catchProfit(val) {
-  if(val) {
-    console.log(val)
   }
 }
 

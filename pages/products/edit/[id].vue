@@ -22,13 +22,13 @@
         <div class="w-full lg:w-3/12 mt-3 lg:mt-0">
           <div class="form-group px-2">
             <label for="" class="text-grey">Basic Price</label>
-            <input v-model="product.basic_price" type="text" class="input-field">
+            <input v-model="product.purchase_price" type="text" class="input-field">
           </div>
         </div>
         <div class="w-full lg:w-3/12 mt-3 lg:mt-0">
           <div class="form-group px-2">
             <label for="" class="text-grey">Selling Price</label>
-            <input v-model="product.selling_price" type="number" class="input-field">
+            <input v-model="product.sale_price" type="number" class="input-field">
           </div>
         </div>
         <div class="relative w-full lg:w-3/12 mt-3 lg:mt-0" >
@@ -65,18 +65,37 @@ const selectedCategories = ref({})
 
 const router = useRouter()
 const route = useRoute()
-const product = reactive({
+const product = ref({
   name: '',
   quantity: '',
-  basic_price: '',
-  selling_price: '',
+  purchase_price: '',
+  sale_price: '',
   category: '',
   slug: ''
 });
 
+const cookie = useCookie('token')
+
+
 
 onMounted(async () => {
-  getData()
+  const category = await fetch(`http://127.0.0.1:3333/api/products/`)
+
+  const response = await fetch(`http://127.0.0.1:3333/api/products/${route.params.id}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${cookie.value}`
+    }
+  })
+  if (response.status === 201) {
+    const data = await response.json()
+    console.log(data.data[0])
+    product.value.name = data.data[0].name
+    product.value.quantity = data.data[0].quantity
+    product.value.purchase_price = data.data[0].purchase_price
+    product.value.sale_price = data.data[0].sale_price
+    product.value.slug = data.data[0].slug
+  }
 })
 
 onBeforeMount(async () => {
