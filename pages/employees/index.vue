@@ -44,7 +44,7 @@
 						<div>
 							<p class="text-grey">In Total</p>
 							<div class="text-[32px] font-bold text-dark mt-[6px]">
-								425,000
+								2
 							</div>
 						</div>
 					</div>
@@ -54,7 +54,7 @@
 						<div>
 							<p class="text-grey">Active</p>
 							<div class="text-[32px] font-bold text-dark mt-[6px]">
-								205,399
+								2
 							</div>
 						</div>
 					</div>
@@ -64,7 +64,7 @@
 						<div>
 							<p class="text-grey">Inactive</p>
 							<div class="text-[32px] font-bold text-dark mt-[6px]">
-									142,593
+								0
 							</div>
 						</div>
 					</div>

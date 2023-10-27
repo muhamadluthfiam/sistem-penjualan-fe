@@ -13,7 +13,7 @@ export const useProductStore = defineStore('product', {
   actions: {
     async createProducts ({ name, quantity, category_id, basic_price, selling_price, slug }) {
       const cookie = useCookie('token')
-      const { data, pending } = await useFetch('http://127.0.0.1:3333/api/v1/products', {
+      const { data, pending } = await useFetch('http://127.0.0.1:3333/api/products', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -37,11 +37,11 @@ export const useProductStore = defineStore('product', {
 
     async getProducts () {
       const cookie = await useCookie('token')
-      const { data } = await useAsyncData('data', () => $fetch(`http://127.0.0.1:3333/api/v1/products`, {
+      const { data } = await useAsyncData('data', () => $fetch(`http://127.0.0.1:3333/api/products`, {
           method: 'GET',
           headers: { 
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${cookie.value.token}`
+            'Authorization': `Bearer ${cookie.value}`
           },
           params: {
             include: 'category_id',
@@ -74,9 +74,6 @@ export const useProductStore = defineStore('product', {
         headers: { 
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${cookie.value.token}`
-        },
-        onResponse({ request, response }) {
-          console.log(response)
         }
       })
       return data.value

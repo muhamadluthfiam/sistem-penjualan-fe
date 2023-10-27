@@ -25,7 +25,7 @@
   "dependencies": {
     "@pinia/nuxt": "^0.4.11",
     "date-fns": "^2.30.0",
-    "pinia": "^2.1.6",
-    "vuetify": "^3.4.0-alpha.1"
+    "gridjs": "^6.0.6",
+    "pinia": "^2.1.6"
   }
 }

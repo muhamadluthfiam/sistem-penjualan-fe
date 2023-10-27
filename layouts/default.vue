@@ -1,16 +1,16 @@
 <template>
   <div>
     <TheSidebar />
-    <div class="lg:pr-[70px] py-[50px] lg:ml-[320px] xl:ml-[365px] px-4 lg:pl-0">
+    <div class="p-10" :class="[isOpen ? 'ml-[320px]' : 'w-full']">
       <slot />
     </div>
   </div>
 </template>
-<script>
+<script setup>
+import { storeToRefs } from 'pinia';
+
 import TheSidebar from '@/components/global/TheSidebar.vue'
-export default {
-  setup() {
-    
-  },
-}
+import { useUtilsStore } from '~/store/utils';
+const { isOpen } = storeToRefs(useUtilsStore());
+
 </script>

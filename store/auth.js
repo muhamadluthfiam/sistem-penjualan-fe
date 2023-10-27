@@ -7,7 +7,7 @@ export const useAuthStore = defineStore('auth', {
   }),
   actions: {
     async authenticatedUser({ email, password }) {
-      const { data, pending } = await useFetch('http://127.0.0.1:3333/login', {
+      const { data, pending } = await useFetch('http://127.0.0.1:3333/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: {
@@ -16,10 +16,9 @@ export const useAuthStore = defineStore('auth', {
         }
       })
       this.loading = pending
-
       if (data.value) {
         const token = useCookie('token')
-        token.value = data.value.data.token
+        token.value = data.value.token
         this.isAuthenticated = true
       }
     },

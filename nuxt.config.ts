@@ -11,6 +11,5 @@ export default defineNuxtConfig({
   },
   modules: [
     '@pinia/nuxt',
-    '@invictus.codes/nuxt-vuetify'
   ]
 })

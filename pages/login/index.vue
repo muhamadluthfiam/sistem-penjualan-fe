@@ -4,7 +4,7 @@
       Sign In
     </div>
     <p class="mt-4 text-base leading-7 text-center mb-[50px] text-grey">
-      Manage your employees to achieve <br> a bigger goals for your company
+      Enter your Sistem Informasi Penjualan Sparepart <br> Application
     </p>
     <form class="w-full lg:w-1/3 card">
       <div class="form-group">

@@ -2,23 +2,19 @@
   <div>
     <section class="flex flex-col flex-wrap justify-between gap-6 md:items-center md:flex-row">
       <div class="flex items-center justify-between gap-4">
-          <a href="#" id="toggleOpenSidebar" class="lg:hidden">
-              <svg class="w-6 h-6 text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M4 6h16M4 12h16M4 18h7">
-                  </path>
-              </svg>
-          </a>
+          <button @click="isOpen = !isOpen">
+            <svg class="w-6 h-6 text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h7">
+              </path>
+            </svg>
+          </button>
           <div class="text-[32px] font-semibold text-dark">
-              Products
+            Products
           </div>
       </div>
       <div class="flex items-center gap-4">
-        <!-- <form class="shrink md:w-[516px] w-full">
-          <input type="text" name="" id="" class="input-field !outline-none !border-none italic form-icon-search ring-indigo-200
-                focus:ring-2 transition-all duration-300 w-full" placeholder="Search people, team, project">
-        </form> -->
         <a href="#"
           class="flex-none w-[46px] h-[46px] bg-white rounded-full p-[11px] relative notification-dot">
           <img src="../assets/svgs/ic-bell.svg" alt="">
@@ -75,67 +71,93 @@
       </div>
     </section>
     <section class="pt-[30px]">
-      <div class="card">
-        <table class="w-full">
-          <thead class="border-y-2 px-2">
-            <tr>
-              <th class="text-left font-thin text-slate-800" v-for="column in tableColumns" :key="column">{{ column }}</th>
-            </tr>
-          </thead>
-          <tbody v-if="tableData">
-            <tr v-for="(row, index) in productStore.products" :key="index">
-              <td>{{ index + 1 }}</td>
-              <td>{{ row.name }}</td>
-              <td>{{ row.category.name }}</td>
-              <td>{{ row.quantity }}</td>
-              <td>Rp.{{ rupiahFormat(row.basic_price) }}</td>
-              <td>Rp.{{ rupiahFormat(row.selling_price) }}</td>
-              <td>{{ row.slug }}</td>
-              <td class="flex flex-wrap flex-col gap-2 my-8">
-                <button @click="itemToDelete = row" type="button" class="border px-3 py-1 rounded-md hover:bg-red-400 hover:text-white hover:shadow-md">Delete</button>
-                <nuxt-link :to="'/products/edit/' + row.id" class="border px-3 py-1 rounded-md bg-green-500 text-white hover:bg-green-400 hover:shadow-md text-center">Edit</nuxt-link>
-              </td>
-              <!-- <td v-for="(value, key) in row" :key="key" :class="[key === 'no' ? 'text-center' : '']">
-                {{ value }}
-              </td> -->
-            </tr>
-          </tbody>
-        </table>
-        <div v-if="itemToDelete" class="fixed inset-0 flex items-center justify-center z-20">
-          <div @click="cancelDelete" class="cursor-pointer fixed inset-0 z-10 bg-gray-800 bg-opacity-60"></div>
+      <div v-if="itemToDelete" class="fixed inset-0 flex items-center justify-center z-20">
+        <div @click="cancelDelete" class="cursor-pointer fixed inset-0 z-10 bg-gray-800 bg-opacity-60"></div>
 
-          <div class="relative z-20 bg-white rounded-md flex flex-wrap gap-20 p-4 hover:shadow-white shadow-2xl">
-            <div class="w-28">
-              <p class="font-sans text-5xl font-semibold">ARE YOU SURE DELETE DATA ?</p>
-            </div>
-            <div class="mt-4 flex flex-col-reverse justify-center items-center gap-4">
-              <!-- <button @click="cancelDelete" class="px-4 py-2 mr-2 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md">Cancel</button> -->
-              <button @click="cancelDelete" class="px-4 py-2 text-green-500 bg-green-300 hover:bg-green-400 hover:text-green-600 rounded-md hover:shadow-md hover:underline ease-out duration-500">Cancel</button>
-              <button @click="confirmDelete" class="px-4 py-2 text-red-500 bg-red-300 hover:bg-red-400 hover:text-red-600 rounded-md hover:shadow-md hover:underline ease-out duration-500">Delete</button>
-            </div>
+        <div class="relative z-20 bg-white rounded-md flex flex-wrap gap-20 p-4 hover:shadow-white shadow-2xl">
+          <div class="w-28">
+            <p class="font-sans text-5xl font-semibold">ARE YOU SURE DELETE DATA ?</p>
+          </div>
+          <div class="mt-4 flex flex-col-reverse justify-center items-center gap-4">
+            <button @click="cancelDelete" class="px-4 py-2 mr-2 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md">Cancel</button>
+            <button @click="cancelDelete" class="px-4 py-2 text-green-500 bg-green-300 hover:bg-green-400 hover:text-green-600 rounded-md hover:shadow-md hover:underline ease-out duration-500">Cancel</button>
+            <button @click="confirmDelete" class="px-4 py-2 text-red-500 bg-red-300 hover:bg-red-400 hover:text-red-600 rounded-md hover:shadow-md hover:underline ease-out duration-500">Delete</button>
           </div>
         </div>
       </div>
+      <div id="myGrid"></div>
     </section>
   </div>
 </template>
 <script setup>
-
+import { Grid, h } from 'gridjs'
+import "gridjs/dist/theme/mermaid.css";
 import { onMounted, ref, onBeforeMount, computed, reactive } from 'vue'
 import { storeToRefs } from 'pinia';
 import { useProductStore } from '~/store/product';
+import { useUtilsStore } from '~/store/utils';
+
 import TableProducts from '@/components/table/TableProducts.vue'
+
+
+const { isOpen } = storeToRefs(useUtilsStore());
 
 const productStore = useProductStore()
 const { deleteProducts, getProducts } = useProductStore()
 const router = useRouter()
-const tableColumns = ref(['No', 'Nama', 'Category', 'Quantity', 'Price', 'Selling price', 'Slug'])
+const columns = ['No', 'Nama', 'Category', 'Quantity', 'Price', 'Selling price', 'Slug']
 const tableData = ref([])
 const itemToDelete = ref(null)
+const cookie = useCookie('token')
 
 onMounted(async () => {
   await productStore.getProducts()
-  tableData.value = productStore.data
+  tableData.value = productStore.products.data
+  const response = await fetch('http://127.0.0.1:3333/api/products?page=10', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${cookie.value}`
+    }
+  })
+  if (response.status === 200) {
+    const data = await response.json()
+    new Grid({
+      autoWidth: true,
+      pagination: {
+        limit: data.data.meta.per_page,
+        server: {
+          url: (prev, page, limit) => `${prev}?perPage=${limit}&page=${page + 1}`
+        }
+      },
+      width: '100%',
+      search: true,
+      sort: true,
+      autoWidth: true,
+      fixedHeader: true,
+      resizable: true,
+      columns: [{ name: 'id', hidden:true }, 'Name', 'Brand', 'Category', 'Qty', 'Unit', 'Purchase', 'Sale', 'Profit', 
+        { 
+          name: 'Actions',
+          formatter: (cell, row) => {
+            return h('button', {
+              className: 'py-2 mb-4 px-4 border rounded-md text-white bg-blue-600',
+              onClick: () => console.log(row.cells)
+            }, 'Edit');
+          }
+        },
+      ],
+      server: {
+        url: 'http://127.0.0.1:3333/api/products',
+        then: data => data.data.data.map(data => 
+          [ data.id, data.name, data.brand.name, data.category.name, data.quantity ,data.unit.name, 'Rp.' + rupiahFormat(data.purchase_price), 'Rp.' + rupiahFormat(data.sale_price), 'Rp.' +  rupiahFormat(data.profit), null ]
+        ),
+        total: data => data.data.meta.total,
+        headers: {
+          Authorization: `Bearer ${cookie.value}`
+        },
+      },
+    }).render(document.getElementById('myGrid'))
+  }
 })
 
 const cancelDelete = () => {
@@ -153,6 +175,12 @@ const confirmDelete = async () => {
 function rupiahFormat (val) {
   if (val) {
     return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+  }
+}
+
+function catchProfit(val) {
+  if(val) {
+    console.log(val)
   }
 }
 
