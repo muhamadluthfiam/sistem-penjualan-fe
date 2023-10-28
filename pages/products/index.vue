@@ -47,15 +47,15 @@
           </div>
         </div>
         <div class="card !gap-y-10">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-grey">products available</p>
-                <p class="text-xs text-grey">Ready to sale</p>
-                <div class="text-[32px] font-bold text-dark mt-[6px]">
-                  205
-                </div>
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-grey">Total Product</p>
+              <p class="text-xs text-grey">Ready to sale</p>
+              <div class="text-[32px] font-bold text-dark mt-[6px]">
+                {{ totalProduct }}
               </div>
             </div>
+          </div>
         </div>
         <div class="card !gap-y-10">
           <div class="flex items-center justify-between">
@@ -109,9 +109,11 @@ const columns = ['No', 'Nama', 'Category', 'Quantity', 'Price', 'Selling price',
 const tableData = ref([])
 const itemToDelete = ref(null)
 const cookie = useCookie('token')
+let totalProduct = ref(null)
+
 
 onMounted(async () => {
-  const response = await fetch('http://127.0.0.1:3333/api/products?page=10', {
+  const response = await fetch('http://127.0.0.1:3333/api/products', {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${cookie.value}`
@@ -119,6 +121,7 @@ onMounted(async () => {
   })
   if (response.status === 200) {
     const data = await response.json()
+    totalProduct.value = data.data.meta.total
     new Grid({
       autoWidth: true,
       pagination: {
@@ -133,7 +136,7 @@ onMounted(async () => {
       autoWidth: true,
       fixedHeader: true,
       resizable: true,
-      columns: [{ name: 'id', hidden:true }, 'Name', 'Brand', 'Category', 'Qty', 'Unit', 'Purchase', 'Sale', 'Profit', 
+      columns: [{ name: 'id', hidden:true }, 'Name', 'Brand', 'Category', 'Qty', 'Unit', {name: 'Purchase', hidden: true}, 'Sale', 'Profit', 
         { 
           name: 'Actions',
           formatter: (cell, row) => {
