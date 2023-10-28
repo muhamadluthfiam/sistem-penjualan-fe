@@ -11,7 +11,7 @@
             </svg>
           </button>
           <div class="text-[32px] font-semibold text-dark">
-            Unit
+            Brand
           </div>
       </div>
       <div class="flex items-center gap-4">
@@ -26,12 +26,12 @@
         <div class="flex flex-col justify-between gap-6 sm:items-center sm:flex-row">
           <div>
               <div class="text-xl font-medium text-dark">
-                List Of Units
-                <p class="text-sm font-extralight text-slate-400 italic">The Enterprise Unit</p>
+                List Of Brands
+                <p class="text-sm font-extralight text-slate-400 italic">The Enterprise Brands</p>
               </div>
               <!-- <p class="text-grey">Your team powers</p> -->
           </div>
-          <NuxtLink to="/unit/add" class="btn btn-primary">Add Units</NuxtLink>
+          <NuxtLink to="/brands/add" class="btn btn-primary">Add Brands</NuxtLink>
         </div>
       </div>
     </section>
@@ -96,14 +96,14 @@ onMounted(async () => {
           return h('button', {
             className: 'py-2 mb-4 px-4 border rounded-md text-white bg-blue-600',
             onClick: () => {
-                router.push({ path: `/unit/edit/` + row.cells[0].data })
+                router.push({ path: `/brands/edit/` + row.cells[0].data })
             }
           }, 'Edit')
         }
       }
     ],
     server: {
-      url: 'http://127.0.0.1:3333/api/unit',
+      url: 'http://127.0.0.1:3333/api/brands',
       then: data => data.data.data.map(data => 
         [ data.id, data.name ]
       ),

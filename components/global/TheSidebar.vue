@@ -37,6 +37,10 @@
           <img src="/svgs/ic-ricbox.svg" alt="">
           Product
         </NuxtLink>
+        <NuxtLink to="/brands" class="nav-link">
+          <img src="/svgs/ic-flag.svg" alt="">
+          Brands
+        </NuxtLink>
         <NuxtLink to="/categories" class="nav-link">
           <img src="/svgs/ic-category.svg" alt="">
           Categories
@@ -44,6 +48,10 @@
         <NuxtLink to="/customers" class="nav-link">
           <img src="/svgs/ic-users.svg" alt="">
           Customers
+        </NuxtLink>
+        <NuxtLink to="/suppliers" class="nav-link">
+          <img src="/svgs/ic-gift.svg" alt="">
+          Suppliers
         </NuxtLink>
         <NuxtLink to="/unit" class="nav-link">
           <img src="/svgs/ic-stack.svg" alt="">

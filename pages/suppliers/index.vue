@@ -11,7 +11,7 @@
             </svg>
           </button>
           <div class="text-[32px] font-semibold text-dark">
-            Unit
+            Suppliers
           </div>
       </div>
       <div class="flex items-center gap-4">
@@ -26,12 +26,12 @@
         <div class="flex flex-col justify-between gap-6 sm:items-center sm:flex-row">
           <div>
               <div class="text-xl font-medium text-dark">
-                List Of Units
-                <p class="text-sm font-extralight text-slate-400 italic">The Enterprise Unit</p>
+                List Of Suppliers
+                <p class="text-sm font-extralight text-slate-400 italic">The Enterprise Suppliers</p>
               </div>
               <!-- <p class="text-grey">Your team powers</p> -->
           </div>
-          <NuxtLink to="/unit/add" class="btn btn-primary">Add Units</NuxtLink>
+          <NuxtLink to="/suppliers/add" class="btn btn-primary">Add Suppliers</NuxtLink>
         </div>
       </div>
     </section>
@@ -89,23 +89,34 @@ onMounted(async () => {
     autoWidth: true,
     fixedHeader: true,
     resizable: true,
-    columns: [{ name: 'id', hidden:true }, 'Name', 
+    columns: [{ name: 'id', hidden:true }, 'Name', 'Address', 'Phone', { name: 'is_member', hidden:true } , 
       { 
         name: 'Actions',
         formatter: (cell, row) => {
           return h('button', {
             className: 'py-2 mb-4 px-4 border rounded-md text-white bg-blue-600',
             onClick: () => {
-                router.push({ path: `/unit/edit/` + row.cells[0].data })
+                router.push({ path: `/customers/edit/` + row.cells[0].data })
             }
           }, 'Edit')
         }
-      }
+      },
+      { 
+        formatter: (cell, row) => {
+          return h('button', {
+            className: 'py-2 mb-4 px-4 border rounded-md text-white bg-red-600',
+            onClick: async () => {
+              itemToDelete.value = true,
+              itemIdToDelete.value = row.cells[0].data
+            }
+          }, 'Delete')
+        }
+      },
     ],
     server: {
-      url: 'http://127.0.0.1:3333/api/unit',
+      url: 'http://127.0.0.1:3333/api/supplier',
       then: data => data.data.data.map(data => 
-        [ data.id, data.name ]
+        [ data.id, data.name, data.address, data.phone, data.is_member ]
       ),
       total: data => data.data.meta.total,
       headers: {
@@ -121,17 +132,16 @@ const cancelDelete = () => {
 }
 
 const confirmDelete = async () => {
-  const { status } = await useFetch(`http://127.0.0.1:3333/api/unit/${itemIdToDelete.value}`, {
+  const { status } = await useFetch(`http://127.0.0.1:3333/api/supplier/${itemIdToDelete.value}`, {
     method: 'DELETE',
     headers: {
       Authorization: `Bearer ${cookie.value}`
     }
   })
-  console.log(status)
   if (status.value === 'success') {
     itemToDelete.value = false
     reloadNuxtApp({
-      path: "/unit",
+      path: "/suppliers",
       ttl: 1000,
     });
   }
