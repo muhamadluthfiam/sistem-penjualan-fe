@@ -11,14 +11,10 @@
             </svg>
           </button>
           <div class="text-[32px] font-semibold text-dark">
-              Customers
+            Customers
           </div>
       </div>
       <div class="flex items-center gap-4">
-        <!-- <form class="shrink md:w-[516px] w-full">
-          <input type="text" name="" id="" class="input-field !outline-none !border-none italic form-icon-search ring-indigo-200
-                focus:ring-2 transition-all duration-300 w-full" placeholder="Search people, team, project">
-        </form> -->
         <a href="#"
           class="flex-none w-[46px] h-[46px] bg-white rounded-full p-[11px] relative notification-dot">
           <img src="../assets/svgs/ic-bell.svg" alt="">
@@ -41,7 +37,9 @@
     </section>
     <section class="pt-[30px]">
         <!-- Section Header -->
-      <div class="flex">
+
+        <!-- {{ itemToDelete }} -->
+      <div class="flex relative">
         <div v-if="itemToDelete" class="fixed inset-0 flex items-center justify-center z-20">
           <div @click="cancelDelete" class="cursor-pointer fixed inset-0 z-10 bg-gray-800 bg-opacity-60"></div>
           <div class="relative z-20 bg-white rounded-md flex flex-wrap gap-20 p-4 hover:shadow-white shadow-2xl">
@@ -50,8 +48,7 @@
             </div>
             <div class="mt-4 flex flex-col-reverse justify-center items-center gap-4">
               <button @click="cancelDelete" class="px-4 py-2 mr-2 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md">Cancel</button>
-              <button @click="cancelDelete" class="px-4 py-2 text-green-500 bg-green-300 hover:bg-green-400 hover:text-green-600 rounded-md hover:shadow-md hover:underline ease-out duration-500">Cancel</button>
-              <button @click="confirmDelete" class="px-4 py-2 text-red-500 bg-red-300 hover:bg-red-400 hover:text-red-600 rounded-md hover:shadow-md hover:underline ease-out duration-500">Delete</button>
+              <button @click="confirmDelete" type="submit" class="px-4 py-2 text-red-500 bg-red-300 hover:bg-red-400 hover:text-red-600 rounded-md hover:shadow-md hover:underline ease-out duration-500">Delete</button>
             </div>
           </div>
         </div>
@@ -61,9 +58,10 @@
   </div>
 </template>
 <script setup>
+import { reloadNuxtApp } from "nuxt/app";
 import { Grid, h } from 'gridjs'
 import "gridjs/dist/theme/mermaid.css";
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, render } from 'vue'
 import { storeToRefs } from 'pinia';
 import { useUtilsStore } from '~/store/utils';
 
@@ -72,69 +70,82 @@ const { isOpen } = storeToRefs(useUtilsStore());
 
 const router = useRouter()
 const cookie = useCookie('token')
-const itemToDelete = ref(null)
-
+let itemToDelete = ref(false)
+let itemIdToDelete = ref(null)
+const isGridInitialized = ref(false);
 
 onMounted(async () => {
-  const response = await fetch('http://127.0.0.1:3333/api/customer', {
-    method: 'GET',
+  const dataGrid = new Grid({
+    autoWidth: true,
+    pagination: {
+      limit: 10,
+      server: {
+        url: (prev, page, limit) => `${prev}?perPage=${limit}&page=${page + 1}`
+      }
+    },
+    width: '100%',
+    search: true,
+    sort: true,
+    autoWidth: true,
+    fixedHeader: true,
+    resizable: true,
+    columns: [{ name: 'id', hidden:true }, 'Name', 'Address', 'Phone', { name: 'is_member', hidden:true } , 
+      { 
+        name: 'Actions',
+        formatter: (cell, row) => {
+          return h('button', {
+            className: 'py-2 mb-4 px-4 border rounded-md text-white bg-blue-600',
+            onClick: () => {
+                router.push({ path: `/customers/edit/` + row.cells[0].data })
+            }
+          }, 'Edit')
+        }
+      },
+      { 
+        formatter: (cell, row) => {
+          return h('button', {
+            className: 'py-2 mb-4 px-4 border rounded-md text-white bg-red-600',
+            onClick: async () => {
+              itemToDelete.value = true,
+              itemIdToDelete.value = row.cells[0].data
+            }
+          }, 'Delete')
+        }
+      },
+    ],
+    server: {
+      url: 'http://127.0.0.1:3333/api/customer',
+      then: data => data.data.data.map(data => 
+        [ data.id, data.name, data.address, data.phone, data.is_member ]
+      ),
+      total: data => data.data.meta.total,
+      headers: {
+        Authorization: `Bearer ${cookie.value}`
+      },
+    },
+  }).render(document.getElementById('myGrid')).forceRender()
+})
+
+
+const cancelDelete = () => {
+  itemToDelete.value = false
+}
+
+const confirmDelete = async () => {
+  const { status } = await useFetch(`http://127.0.0.1:3333/api/customer/${itemIdToDelete.value}`, {
+    method: 'DELETE',
     headers: {
       Authorization: `Bearer ${cookie.value}`
     }
   })
-  if (response.status === 200) {
-    const data = await response.json()
-    new Grid({
-      autoWidth: true,
-      pagination: {
-        limit: data.data.meta.per_page,
-        server: {
-          url: (prev, page, limit) => `${prev}?perPage=${limit}&page=${page + 1}`
-        }
-      },
-      width: '100%',
-      search: true,
-      sort: true,
-      autoWidth: true,
-      fixedHeader: true,
-      resizable: true,
-      columns: [{ name: 'id', hidden:true }, 'Name', 'Address', 'Phone', { name: 'is_member', hidden:true } , 
-        { 
-          name: 'Actions',
-          formatter: (cell, row) => {
-            return h('button', {
-              className: 'py-2 mb-4 px-4 border rounded-md text-white bg-blue-600',
-              onClick: () => {
-                  router.push({ path: `/customers/edit/` + row.cells[0].data })
-              }
-            }, 'Edit')
-          }
-        },
-        { 
-          formatter: (cell, row) => {
-            return h('button', {
-              className: 'py-2 px-4 border rounded-md text-white bg-red-600',
-              onClick: () => {
-                  itemToDelete = true
-              }
-            }, 'Delete')
-          }
-        },
-      ],
-      server: {
-        url: 'http://127.0.0.1:3333/api/customer',
-        then: data => data.data.data.map(data => 
-          [ data.id, data.name, data.address, data.phone, data.is_member ]
-        ),
-        total: data => data.data.meta.total,
-        headers: {
-          Authorization: `Bearer ${cookie.value}`
-        },
-      },
-    }).render(document.getElementById('myGrid'))
+  if (status.value === 'success') {
+    itemToDelete.value = false
+    reloadNuxtApp({
+      path: "/customers",
+      ttl: 1000,
+    });
   }
-})
-
+}
 
 
 </script>

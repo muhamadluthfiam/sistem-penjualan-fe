@@ -62,7 +62,7 @@ export const useProductStore = defineStore('product', {
         },
         params: {
           include: 'category_id',
-        },
+        },x
       })
       return status
     },

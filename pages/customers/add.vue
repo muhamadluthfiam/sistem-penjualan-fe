@@ -71,10 +71,7 @@ const isMember = ref([
 ])
 
 const selectIsMember = ref({})
-
-
 const cookie = useCookie('token')
-
 
 const addCustomer = async () => {
   const response = await useFetch(`http://127.0.0.1:3333/api/customer`, {
