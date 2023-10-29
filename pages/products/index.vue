@@ -41,7 +41,7 @@
               <p class="text-grey">Total Assets</p>
               <p class="text-xs text-grey">Rupiah Format</p>
               <div class="text-[32px] font-bold text-dark mt-[6px]">
-               {{ formatRupiah(totalSum) }}
+               <!-- {{ formatRupiah(totalSum) }} -->
               </div>
             </div>
           </div>

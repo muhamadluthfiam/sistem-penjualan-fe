@@ -15,7 +15,7 @@ export const useTransactionsStore = defineStore('transactions', {
     async createTransaction (order_id, product) {
       try {
         const cookie = useCookie('token')
-        const { data, pending } = await useFetch('http://127.0.0.1:3333/api/v1/transaction', {
+        const { data, pending } = await useFetch('http://127.0.0.1:3333/api/detail-sale-transaction', {
           method: 'POST',
           headers: { 
             'Content-Type': 'application/json',
@@ -26,11 +26,7 @@ export const useTransactionsStore = defineStore('transactions', {
             product: product
           }
         })
-        this.loading = pending
-        
-        if (data.value) {
-          this.isSuccess = true
-        }
+        console.log(data)
       } catch (error) {
         console.log(error)
       }

@@ -2,17 +2,17 @@
   <div>
     <section class="flex flex-col flex-wrap justify-between gap-6 md:items-center md:flex-row">
       <div class="flex items-center justify-between gap-4">
-          <button @click="isOpen = !isOpen">
-            <svg class="w-6 h-6 text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M4 6h16M4 12h16M4 18h7">
-              </path>
-            </svg>
-          </button>
-          <div class="text-[32px] font-semibold text-dark">
-            Products
-          </div>
+        <button @click="isOpen = !isOpen">
+          <svg class="w-6 h-6 text-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h7">
+            </path>
+          </svg>
+        </button>
+        <div class="text-[32px] font-semibold text-dark">
+          Transactions
+        </div>
       </div>
       <div class="flex items-center gap-4">
         <a href="#"
@@ -26,11 +26,11 @@
         <div class="flex flex-col justify-between gap-6 sm:items-center sm:flex-row">
           <div>
             <div class="text-xl font-medium text-dark">
-              List Of Products
-              <p class="text-sm font-extralight text-slate-400 italic">Enpower your products</p>
+              List Of Transactions
+              <p class="text-sm font-extralight text-slate-400 italic">Manage your transactions</p>
             </div>
           </div>
-          <NuxtLink to="/products/add" class="btn btn-primary">Add Product</NuxtLink>
+          <NuxtLink to="/transactions/add" class="btn btn-primary">Add Transactions</NuxtLink>
         </div>
       </div>
 
@@ -113,7 +113,7 @@ let totalProduct = ref(null)
 
 
 onMounted(async () => {
-  const response = await fetch('http://127.0.0.1:3333/api/products', {
+  const response = await fetch('http://127.0.0.1:3333/api/sale-transaction', {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${cookie.value}`
@@ -136,24 +136,24 @@ onMounted(async () => {
       autoWidth: true,
       fixedHeader: true,
       resizable: true,
-      columns: [{ name: 'id', hidden:true }, 'Name', 'Brand', 'Category', 'Qty', 'Unit', {name: 'Purchase', hidden: true}, 'Sale', 'Profit', 
+      columns: [{ name: 'id', hidden:true }, 'Invoice', 'Name', 'Date', 
         { 
           name: 'Actions',
           formatter: (cell, row) => {
             return h('button', {
-              className: 'py-2 mb-4 px-4 border rounded-md text-white bg-blue-600',
+              className: 'py-2 px-4 border rounded-md text-white bg-slate-500',
               onClick: () => {
-                  console.log(row.cells[0].data)
-                  router.push({ path: `/products/edit/` + row.cells[0].data })
+                console.log(row.cells[0].data)
+                router.push({ path: `/transactions/detail/` + row.cells[0].data })
               }
-            }, 'Edit');
+            }, 'Detail');
           }
         },
       ],
       server: {
-        url: 'http://127.0.0.1:3333/api/products',
+        url: 'http://127.0.0.1:3333/api/sale-transaction',
         then: data => data.data.data.map(data => 
-          [ data.id, data.name, data.brand.name, data.category.name, data.quantity ,data.unit.name, 'Rp.' + rupiahFormat(data.purchase_price), 'Rp.' + rupiahFormat(data.sale_price), 'Rp.' +  rupiahFormat(data.profit), null ]
+          [ data.id, data.invoice, data.customers.name, data.date]
         ),
         total: data => data.data.meta.total,
         headers: {

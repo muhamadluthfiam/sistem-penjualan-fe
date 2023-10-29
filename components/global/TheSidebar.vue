@@ -41,6 +41,10 @@
           <img src="/svgs/ic-flag.svg" alt="">
           Brands
         </NuxtLink>
+        <NuxtLink to="/transactions" class="nav-link">
+          <img src="/svgs/ic-transaction.svg" alt="">
+          Transactions
+        </NuxtLink>
         <NuxtLink to="/categories" class="nav-link">
           <img src="/svgs/ic-category.svg" alt="">
           Categories
