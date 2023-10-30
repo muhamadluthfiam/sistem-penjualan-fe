@@ -112,6 +112,8 @@ const cookie = useCookie('token')
 let totalProduct = ref(null)
 
 
+console.log('hellow')
+
 onMounted(async () => {
   const response = await fetch('http://127.0.0.1:3333/api/sale-transaction', {
     method: 'GET',

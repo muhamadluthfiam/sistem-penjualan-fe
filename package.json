@@ -24,8 +24,10 @@
   },
   "dependencies": {
     "@pinia/nuxt": "^0.4.11",
+    "chart.js": "^4.4.0",
     "date-fns": "^2.30.0",
     "gridjs": "^6.0.6",
-    "pinia": "^2.1.6"
+    "pinia": "^2.1.6",
+    "vue-chartjs": "^5.2.0"
   }
 }

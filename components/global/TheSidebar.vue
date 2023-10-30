@@ -61,10 +61,10 @@
           <img src="/svgs/ic-stack.svg" alt="">
           Unit
         </NuxtLink>
-        <NuxtLink to="/settings" class="nav-link">
+        <!-- <NuxtLink to="/settings" class="nav-link">
           <img src="/svgs/ic-settings.svg" alt="">
           Settings
-        </NuxtLink>
+        </NuxtLink> -->
         <button @click="logout()" class="nav-link">
           <img src="/svgs/ic-signout.svg" alt="">
           Logout

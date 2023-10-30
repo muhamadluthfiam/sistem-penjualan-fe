@@ -23,7 +23,7 @@
             <div>
               <p class="text-grey">Name</p>
               <div class="text-[32px] font-bold text-dark mt-[6px]">
-								{{ detail.customers.name }}
+								{{ detail.customer.name }}
               </div>
             </div>
           </div>
@@ -32,8 +32,8 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-grey">Address</p>
-              <div class="text-[19px] font-bold text-dark mt-[6px]">
-								{{ detail.customers.address }}
+              <div class="text-[30px] font-bold text-dark mt-[6px]">
+								{{ detail.customer.address }}
               </div>
             </div>
           </div>
@@ -43,7 +43,7 @@
             <div>
               <p class="text-grey">Phone</p>
               <div class="text-[32px] font-bold text-dark mt-[6px]">
-                {{ detail.customers.phone }}
+                {{ detail.customer.phone }}
               </div>
             </div>
           </div>
@@ -56,8 +56,8 @@
 						<p>SAHABAT SPAREPART ANDA</p>
 					</div>
 					<div class="flex mt-4 text-xs">
-						<div class="flex-grow">No: <span>{{ detail.sale.invoice }}</span></div>
-						<div> {{ detail.sale.date }} </div>
+						<div class="flex-grow">No: <span>{{ detail.invoice.name }}</span></div>
+						<div> {{ detail.invoice.date }} </div>
 					</div>
 					<hr class="my-2">
 					<div>
@@ -71,17 +71,30 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr v-for="(item, i) in detail.product" :key="i">
+								<tr v-for="(item, i) in detail.items" :key="i">
 									<td class="py-2 text-center"> {{ i + 1 }} </td>
 									<td class="py-2 text-left">
 										<span> {{ item.name }} </span>
 										<br/>
-										<small> {{ priceFormat(item.purchase_price) }} </small>
+										<small> {{ item.brand }} </small>
+										<br/>
+										<small> {{ priceFormat(item.price) }} </small>
 									</td>
 									<td class="py-2 text-center">{{ item.quantity }}</td>
-									<td class="py-2 text-right">{{ priceFormat(item.quantity * item.purchase_price) }}</td>
+									<td class="py-2 text-right">{{ priceFormat(item.quantity * item.price) }}</td>
 								</tr>
 							</tbody>
+							<tfoot>
+								<tr>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td class="py-1 w-3/12 text-right">
+										<span class="font-bold">Total : </span>
+										{{ getTotalPrice() }}
+									</td>
+								</tr>
+							</tfoot>
 						</table>
 					</div>
 				</div>
@@ -100,18 +113,19 @@ const route = useRoute()
 const cookie = useCookie('token')
 
 const detail = ref(null)
+const total = ref(0)
 
 onMounted(async () => {
-  const response = await fetch(`http://127.0.0.1:3333/api/detail-sale-transaction/${route.params.id}`, {
+  const response  = await fetch(`http://127.0.0.1:3333/api/detail-sale-transaction/${route.params.id}`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${cookie.value}`
     }
   })
-  if (response.status === 201) {
-    const data = await response.json()
-    detail.value = data.data[0]
-  }
+	if (response.status === 200) {
+		const data = await response.json()
+		detail.value = data.data.data
+	}
 })
 
 const priceFormat = (number) => {
@@ -127,8 +141,8 @@ const numberFormat = (number) => {
 }
 
 const getTotalPrice = () => {
-  return detail.value.product.reduce(
-    (total, item) => total + item.qty * item.price.replace("Rp.", ""),
+  return detail.value.items.reduce(
+    (total, item) => total + item.quantity * item.price,
     0
   )
 }
