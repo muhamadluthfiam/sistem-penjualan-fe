@@ -121,7 +121,7 @@ const cancelDelete = () => {
 }
 
 const confirmDelete = async () => {
-  const { status } = await useFetch(`http://127.0.0.1:3333/api/unit/${itemIdToDelete.value}`, {
+  const { status } = await useFetch(`http://127.0.0.1:3333/api/brands/${itemIdToDelete.value}`, {
     method: 'DELETE',
     headers: {
       Authorization: `Bearer ${cookie.value}`

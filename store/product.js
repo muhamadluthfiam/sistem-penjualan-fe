@@ -81,7 +81,7 @@ export const useProductStore = defineStore('product', {
 
     async updateProduct (id ,{ name, quantity, category_id, basic_price, selling_price, slug }) {
       const cookie = useCookie('token')
-      const { data, pending } = await useFetch(`http://127.0.0.1:3333/api/v1/products/${id}`, {
+      const { data, pending } = await useFetch(`http://127.0.0.1:3333/api/products/${id}`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',

@@ -60,7 +60,7 @@ onMounted(async () => {
   })
   if (response.status === 201) {
     const data = await response.json()
-    category.name = data.data[0].name
+    category.name = data.data.name
   }
 })
 

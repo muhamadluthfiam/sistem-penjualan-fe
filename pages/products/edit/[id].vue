@@ -33,8 +33,24 @@
         </div>
         <div class="relative w-full lg:w-3/12 mt-3 lg:mt-0" >
           <label for="" class="text-grey">Category</label>
-          <select class="block w-full input-field mt-2" v-model="product.category">
+          <select class="block w-full input-field mt-2" v-model="selectedCategories">
             <option v-for="(val, i) in categories" :key="i" :value="val">
+              {{ val.name }}
+            </option>
+          </select>
+        </div>
+        <div class="relative w-full lg:w-3/12 mt-3 lg:mt-0" >
+          <label for="" class="text-grey">Brands</label>
+          <select class="block w-full input-field mt-2" v-model="selectedBrands">
+            <option v-for="(val, i) in brands" :key="i" :value="val">
+              {{ val.name }}
+            </option>
+          </select>
+        </div>
+        <div class="relative w-full lg:w-3/12 mt-3 lg:mt-0" >
+          <label for="" class="text-grey">Units</label>
+          <select class="block w-full input-field mt-2" v-model="selectedUnits">
+            <option v-for="(val, i) in units" :key="i" :value="val">
               {{ val.name }}
             </option>
           </select>
@@ -62,15 +78,21 @@ const { showProduct, updateProduct } = useProductStore()
 const { getCategories } = useCategoriesStore()
 const categories = ref([])
 const selectedCategories = ref({})
+const units = ref([])
+const selectedUnits = ref({})
+const brands = ref([])
+const selectedBrands = ref({})
 
 const router = useRouter()
 const route = useRoute()
 const product = ref({
   name: '',
   quantity: '',
+  category_id: '',
+  unit_id: '',
+  brand_id: '',
   purchase_price: '',
   sale_price: '',
-  category: '',
   slug: ''
 });
 
@@ -79,7 +101,26 @@ const cookie = useCookie('token')
 
 
 onMounted(async () => {
-  const category = await fetch(`http://127.0.0.1:3333/api/products/`)
+  const category = await fetch(`http://127.0.0.1:3333/api/category/`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${cookie.value}`
+    }
+  })
+  
+  const unit = await fetch(`http://127.0.0.1:3333/api/unit/`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${cookie.value}`
+    }
+  })
+  
+  const brand = await fetch(`http://127.0.0.1:3333/api/brands/`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${cookie.value}`
+    }
+  })
 
   const response = await fetch(`http://127.0.0.1:3333/api/products/${route.params.id}`, {
     method: 'GET',
@@ -89,12 +130,23 @@ onMounted(async () => {
   })
   if (response.status === 201) {
     const data = await response.json()
-    console.log(data.data[0])
     product.value.name = data.data[0].name
     product.value.quantity = data.data[0].quantity
     product.value.purchase_price = data.data[0].purchase_price
     product.value.sale_price = data.data[0].sale_price
     product.value.slug = data.data[0].slug
+  }
+  if (category.status === 200) {    
+    const datas = await category.json()
+    categories.value = datas.data.data
+  }
+  if (brand.status === 200) {    
+    const datas = await brand.json()
+    brands.value = datas.data.data
+  }
+  if (unit.status === 200) {    
+    const datas = await unit.json()
+    units.value = datas.data.data
   }
 })
 
@@ -115,10 +167,20 @@ async function getData() {
 }
 
 const updateData = async () => {
-  const target = ref(Object.assign(product, { category_id: selectedCategories.value.id})) 
-  // console.log(target.value)
-  await updateProduct(route.params.id, target.value)
-  router.back()
+  product.value.category_id = selectedCategories.value.id
+  product.value.brand_id = selectedBrands.value.id
+  product.value.unit_id = selectedUnits.value.id
+  const { status } = await useFetch(`http://127.0.0.1:3333/api/products/${route.params.id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${cookie.value}`
+    },
+    body: product.value
+  })
+  if (status) {
+    router.push('/products')
+  }
 }
 
 

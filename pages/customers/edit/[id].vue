@@ -90,9 +90,9 @@ onMounted(async () => {
   })
   if (response.status === 201) {
     const data = await response.json()
-    customer.name = data.data[0].name
-    customer.address = data.data[0].address
-    customer.phone = data.data[0].phone
+    customer.name = data.data.name
+    customer.address = data.data.address
+    customer.phone = data.data.phone
   }
 })
 

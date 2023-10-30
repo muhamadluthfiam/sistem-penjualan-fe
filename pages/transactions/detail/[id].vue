@@ -17,7 +17,39 @@
 			</div>
 		</section>
 		<section class="pt-[50px]">
-			<div class="w-full">
+			<div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:gap-11" v-if="detail">
+        <div class="card !gap-y-10">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-grey">Name</p>
+              <div class="text-[32px] font-bold text-dark mt-[6px]">
+								{{ detail.customers.name }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card !gap-y-10">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-grey">Address</p>
+              <div class="text-[19px] font-bold text-dark mt-[6px]">
+								{{ detail.customers.address }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card !gap-y-10">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-grey">Phone</p>
+              <div class="text-[32px] font-bold text-dark mt-[6px]">
+                {{ detail.customers.phone }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+			<div class="w-full mt-10">
 				<div id="receipt-content" class="text-left w-full text-sm p-6 overflow-hidden card" v-if="detail">
 					<div class="text-center">
 						<h2 class="text-xl font-semibold">JAYA MANDIRI PART</h2>

@@ -35,21 +35,21 @@
       </div>
 
       <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:gap-11">
-        <div class="card !gap-y-10">
+        <!-- <div class="card !gap-y-10">
           <div class="flex items-center justify-between">
             <div>
               <p class="text-grey">Total Assets</p>
               <p class="text-xs text-grey">Rupiah Format</p>
               <div class="text-[32px] font-bold text-dark mt-[6px]">
-               <!-- {{ formatRupiah(totalSum) }} -->
+               {{ formatRupiah(totalSum) }}
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
         <div class="card !gap-y-10">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-grey">Total Product</p>
+              <p class="text-grey">Total Transactions</p>
               <p class="text-xs text-grey">Ready to sale</p>
               <div class="text-[32px] font-bold text-dark mt-[6px]">
                 {{ totalProduct }}
@@ -57,7 +57,7 @@
             </div>
           </div>
         </div>
-        <div class="card !gap-y-10">
+        <!-- <div class="card !gap-y-10">
           <div class="flex items-center justify-between">
             <div>
               <p class="text-grey">Empty items</p>
@@ -67,7 +67,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </section>
     <section class="pt-[30px]">

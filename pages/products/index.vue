@@ -41,7 +41,7 @@
               <p class="text-grey">Total Assets</p>
               <p class="text-xs text-grey">Rupiah Format</p>
               <div class="text-[32px] font-bold text-dark mt-[6px]">
-               <!-- {{ formatRupiah(totalSum) }} -->
+               {{ formatRupiah(profit) }}
               </div>
             </div>
           </div>
@@ -57,7 +57,7 @@
             </div>
           </div>
         </div>
-        <div class="card !gap-y-10">
+        <!-- <div class="card !gap-y-10">
           <div class="flex items-center justify-between">
             <div>
               <p class="text-grey">Empty items</p>
@@ -67,7 +67,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </section>
     <section class="pt-[30px]">
@@ -110,6 +110,7 @@ const tableData = ref([])
 const itemToDelete = ref(null)
 const cookie = useCookie('token')
 let totalProduct = ref(null)
+let profit = ref(0)
 
 
 onMounted(async () => {
@@ -122,6 +123,9 @@ onMounted(async () => {
   if (response.status === 200) {
     const data = await response.json()
     totalProduct.value = data.data.meta.total
+    data.data.data.forEach((val) => {
+      profit.value += val.purchase_price
+    })
     new Grid({
       autoWidth: true,
       pagination: {
@@ -136,7 +140,7 @@ onMounted(async () => {
       autoWidth: true,
       fixedHeader: true,
       resizable: true,
-      columns: [{ name: 'id', hidden:true }, 'Name', 'Brand', 'Category', 'Qty', 'Unit', {name: 'Purchase', hidden: true}, 'Sale', 'Profit', 
+      columns: [{ name: 'id', hidden:true }, 'Name', 'Brand', 'Category', 'Qty', 'Unit', {name: 'Purchase', hidden: true}, 'Sale', {name: 'Profit', hidden: true}, 
         { 
           name: 'Actions',
           formatter: (cell, row) => {
@@ -147,6 +151,17 @@ onMounted(async () => {
                   router.push({ path: `/products/edit/` + row.cells[0].data })
               }
             }, 'Edit');
+          }
+        },
+        { 
+          formatter: (cell, row) => {
+            return h('button', {
+              className: 'py-2 mb-4 px-4 border rounded-md text-white bg-red-600',
+              onClick: () => {
+                  console.log(row.cells[0].data)
+                  router.push({ path: `/products/edit/` + row.cells[0].data })
+              }
+            }, 'Delete');
           }
         },
       ],
