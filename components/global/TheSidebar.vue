@@ -26,11 +26,16 @@
           <img src="/svgs/ic-flag.svg" alt="">
           Roles
         </NuxtLink>
+        <NuxtLink to="/permissions" class="nav-link">
+          <img src="/svgs/ic-flag.svg" alt="">
+          Permissions
+        </NuxtLink>
       </div>
       <div class="flex flex-col gap-4">
         <div class="text-sm text-grey">Sehari hari</div>
         <NuxtLink to="/" class="nav-link">
           <img src="/svgs/ic-grid.svg" alt="">
+          {{ roles }}
           Dashboard
         </NuxtLink>
         <NuxtLink to="/products" class="nav-link">
@@ -82,10 +87,12 @@ import { ref } from 'vue'
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '~/store/auth';
 import { useUtilsStore } from '~/store/utils';
+import { useCookie } from 'nuxt/app';
 
 const { loggedOut } = useAuthStore()
 const router = useRouter()
 const token = 'token'
+const roles = useCookie()
 
 const { isOpen } = storeToRefs(useUtilsStore());
 isOpen.value = false
@@ -96,5 +103,6 @@ const logout = async () => {
   loggedOut(token)
   await router.push('/')
   location.reload()
+  roles.value === null
 }
 </script>

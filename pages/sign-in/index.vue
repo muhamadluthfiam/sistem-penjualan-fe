@@ -17,7 +17,7 @@
       </div>
       <!-- <nuxt-link v-if="!authenticated" to="/login" class="w-full btn btn-primary mt-[14px]">Login</nuxt-link> -->
 
-      <button @click="login" type="button" class="w-full btn btn-primary mt-[14px]">
+      <button @click="login()" type="button" class="w-full btn btn-primary mt-[14px]">
         Sign In
       </button>
     </form>
@@ -46,6 +46,6 @@ const login = async () => {
 
 definePageMeta({
   layout: 'authentication',
-  name: 'login'
+  name: 'sign-in'
 })
 </script>

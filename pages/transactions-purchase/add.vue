@@ -11,13 +11,14 @@
           </svg>
         </button>
         <div class="text-[32px] font-semibold text-dark">
-          Add Transactions
+          Tambah Transaksi
         </div>
       </div>
       <div class="flex flex-wrap justify-around">
         <div class=" p-6 w-full lg:w-6/12 rounded-lg flex-col">
-          <div class="border-2 border-black rounded-xl mb-5">
+          <div class="rounded-xl mb-5">
             <div class="w-full self-start flex flex-col card">
+              <span class="font-semibold text-3xl">Masukan Data Distributor</span>
               <div class="flex flex-wrap lg:mt-4">
                 <div class="w-full">
                   <div class="form-group px-2 mt-4">
@@ -48,7 +49,7 @@
           <div id="myGrid"></div>
           
         </div>
-        <div class="w-full lg:w-4/12 self-start flex flex-col bg-white">
+        <div class="w-full lg:w-4/12 self-start mt-10 flex flex-col bg-white">
           <div class="flex-1 flex flex-col overflow-auto">
             <div class="h-16 text-center flex justify-center">
               <div class="pl-8 text-left text-lg py-4 relative">
@@ -279,12 +280,12 @@ const selectDate = computed({
 const invoice = computed({
   get() {
     if (date.value === '') {
-      return `JMP`
+      return `JMP-IN`
     } else {
       const time = new Date(date.value);
-      receiptNo.value = `JMP-${Math.round(time / 1000)}`;
+      receiptNo.value = `JMP-IN-${Math.round(time / 1000)}`;
       receiptDate.value = dateFormat(time);
-      return `JMP-${Math.round(time / 1000)}`;
+      return `JMP-IN-${Math.round(time / 1000)}`;
     }
   }
 })
@@ -310,7 +311,7 @@ const getItemsCount = () => {
 const router = useRouter()
 
 onMounted(async () => {
-  const customerResponse = await fetch('http://127.0.0.1:3333/api/customer', {
+  const customerResponse = await fetch('http://127.0.0.1:3333/api/supplier', {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${cookie.value}`
@@ -356,7 +357,7 @@ onMounted(async () => {
       server: {
         url: 'http://127.0.0.1:3333/api/products',
         then: data => data.data.data.map(data => 
-          [ data.id, data.name, data.quantity, 'Rp.' + data.sale_price ]
+          [ data.id, data.name, data.quantity, 'Rp.' + data.purchase_price ]
         ),
         total: data => data.data.meta.total,
         headers: {
@@ -390,7 +391,7 @@ const addOrder = async () => {
     const idCustomer = selectCustomer.value.id
     const currentDate = format(parseISO(date.value), "dd-MM-yyyy")
 
-     const response = await useFetch(`http://127.0.0.1:3333/api/sale-transaction`, {
+     const response = await useFetch(`http://127.0.0.1:3333/api/purchase-transaction`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${cookie.value}`
@@ -398,7 +399,7 @@ const addOrder = async () => {
       body: {
         date: date.value,
         invoice: invoice.value,
-        customer_id: selectCustomer.value.id
+        supplier_id: selectCustomer.value.id
       }
     })
     if (response.status) {
@@ -469,15 +470,16 @@ const submit = () => {
 }
 
 const printAndProceed = async () => {
+  console.log(orderId.value);
   const receiptContent = document.getElementById('receipt-content');
   const titleBefore = document.title;
   const printArea = document.getElementById('print-area');
   catchValueProduct.value.map((value) => {
     const data = {
       product_id: value.productId,
-      sale_transaction_id: value.transactionId,
+      purchase_transaction_id: value.transactionId,
       quantity: value.qty,
-      sale_price: value.price.replace("Rp.", "")
+      purchase_price: value.price.replace("Rp.", "")
     }
     onInvoiceProduct.value.push(data)
   })
@@ -492,21 +494,21 @@ const printAndProceed = async () => {
     printArea.innerHTML = ''
     document.title = titleBefore
 
-    router.push('/transactions')
+    router.push('/transactions-purchase')
     clear()
   }
 }
 
  const createTransactions = async (order_id, product) => {
   try {
-    const { data, pending } = await useFetch('http://127.0.0.1:3333/api/detail-sale-transaction', {
+    const { data, pending } = await useFetch('http://127.0.0.1:3333/api/detail-purchase-transaction', {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${cookie.value}`
       },
       body: {
-        sale_transaction_id : order_id,
+        purchase_transaction_id : order_id,
         product: product
       }
     })

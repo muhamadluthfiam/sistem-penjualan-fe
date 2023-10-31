@@ -482,7 +482,6 @@ const printAndProceed = async () => {
     }
     onInvoiceProduct.value.push(data)
   })
-  console.log(onInvoiceProduct.value)
   const api = await createTransactions(orderId.value, onInvoiceProduct.value)
   if (api) {
     printArea.innerHTML = receiptContent.innerHTML

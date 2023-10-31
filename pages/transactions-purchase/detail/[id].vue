@@ -12,7 +12,7 @@
 					</svg>
 				</button>
 				<div class="text-[32px] font-semibold text-dark">
-					Detail Transactions
+					Detail Transaksi Pembelian Dari
 				</div>
 			</div>
 		</section>
@@ -23,7 +23,7 @@
             <div>
               <p class="text-grey">Name</p>
               <div class="text-[32px] font-bold text-dark mt-[6px]">
-								{{ detail.customer.name }}
+								{{ detail.supplier.name }}
               </div>
             </div>
           </div>
@@ -33,7 +33,7 @@
             <div>
               <p class="text-grey">Address</p>
               <div class="text-[30px] font-bold text-dark mt-[6px]">
-								{{ detail.customer.address }}
+								{{ detail.supplier.address }}
               </div>
             </div>
           </div>
@@ -43,7 +43,7 @@
             <div>
               <p class="text-grey">Phone</p>
               <div class="text-[32px] font-bold text-dark mt-[6px]">
-                {{ detail.customer.phone }}
+                {{ detail.supplier.phone }}
               </div>
             </div>
           </div>
@@ -116,7 +116,7 @@ const detail = ref(null)
 const total = ref(0)
 
 onMounted(async () => {
-  const response  = await fetch(`http://127.0.0.1:3333/api/detail-sale-transaction/${route.params.id}`, {
+  const response  = await fetch(`http://127.0.0.1:3333/api/detail-purchase-transaction/${route.params.id}`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${cookie.value}`

@@ -11,7 +11,7 @@
           </svg>
         </button>
         <div class="text-[32px] font-semibold text-dark">
-          Transactions Purchase
+          Transaksi Pembelian
         </div>
       </div>
       <div class="flex items-center gap-4">
@@ -26,11 +26,11 @@
         <div class="flex flex-col justify-between gap-6 sm:items-center sm:flex-row">
           <div>
             <div class="text-xl font-medium text-dark">
-              List Of Transactions
-              <p class="text-sm font-extralight text-slate-400 italic">Manage your transactions</p>
+              Daftar Transaksi pembelian
+              <p class="text-sm font-extralight text-slate-400 italic">Kontrol transaksi pembelian</p>
             </div>
           </div>
-          <NuxtLink to="/transactions/add" class="btn btn-primary">Add Transactions</NuxtLink>
+          <NuxtLink to="/transactions-purchase/add" class="btn btn-primary">Add transaksi pembelian</NuxtLink>
         </div>
       </div>
 
@@ -79,7 +79,6 @@
             <p class="font-sans text-5xl font-semibold">ARE YOU SURE DELETE DATA ?</p>
           </div>
           <div class="mt-4 flex flex-col-reverse justify-center items-center gap-4">
-            <button @click="cancelDelete" class="px-4 py-2 mr-2 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md">Cancel</button>
             <button @click="cancelDelete" class="px-4 py-2 text-green-500 bg-green-300 hover:bg-green-400 hover:text-green-600 rounded-md hover:shadow-md hover:underline ease-out duration-500">Cancel</button>
             <button @click="confirmDelete" class="px-4 py-2 text-red-500 bg-red-300 hover:bg-red-400 hover:text-red-600 rounded-md hover:shadow-md hover:underline ease-out duration-500">Delete</button>
           </div>
@@ -112,10 +111,9 @@ const cookie = useCookie('token')
 let totalProduct = ref(null)
 
 
-console.log('hellow')
 
 onMounted(async () => {
-  const response = await fetch('http://127.0.0.1:3333/api/sale-transaction', {
+  const response = await fetch('http://127.0.0.1:3333/api/purchase-transaction', {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${cookie.value}`
@@ -138,7 +136,7 @@ onMounted(async () => {
       autoWidth: true,
       fixedHeader: true,
       resizable: true,
-      columns: [{ name: 'id', hidden:true }, 'Invoice', 'Name', 'Date', 
+      columns: [{ name: 'id', hidden:true }, 'Invoice', 'Date', 
         { 
           name: 'Actions',
           formatter: (cell, row) => {
@@ -146,16 +144,16 @@ onMounted(async () => {
               className: 'py-2 px-4 border rounded-md text-white bg-slate-500',
               onClick: () => {
                 console.log(row.cells[0].data)
-                router.push({ path: `/transactions/detail/` + row.cells[0].data })
+                router.push({ path: `/transactions-purchase/detail/` + row.cells[0].data })
               }
             }, 'Detail');
           }
         },
       ],
       server: {
-        url: 'http://127.0.0.1:3333/api/sale-transaction',
+        url: 'http://127.0.0.1:3333/api/purchase-transaction',
         then: data => data.data.data.map(data => 
-          [ data.id, data.invoice, data.customers[0].name, data.date],
+          [ data.id, data.invoice, data.date]
         ),
         total: data => data.data.meta.total,
         headers: {
