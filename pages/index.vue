@@ -23,9 +23,9 @@
           <div class="flex items-center justify-between gap-6">
             <div>
               <div class="text-xl font-medium text-dark">
-                  Statistics
+                Statistik
               </div>
-              <p class="text-grey">Your business growth</p>
+              <p class="text-grey">Pantau Penjualan</p>
             </div>
           </div>
         </div>
@@ -34,7 +34,7 @@
           <div class="card !gap-y-10 min-h-[200px]">
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-grey">Employees</p>
+                <p class="text-grey">Pegawai</p>
                 <div class="text-[32px] font-bold text-dark mt-[6px]">
                     0
                 </div>
@@ -49,7 +49,7 @@
               <div>
                 <p class="text-grey">Total Assets</p>
                 <div class="text-[32px] font-bold text-dark mt-[6px]">
-                    0
+                  0
                 </div>
               </div>
               <a href="#">
@@ -60,7 +60,7 @@
           <div class="card !gap-y-10 min-h-[200px]">
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-grey">Product</p>
+                <p class="text-grey">Produk</p>
                 <div class="text-[32px] font-bold text-dark mt-[6px]">
                     0
                 </div>
@@ -79,9 +79,9 @@
           <div class="flex items-center justify-between gap-6">
             <div>
               <div class="text-xl font-medium text-dark">
-                Transaction Sale
+                Transaksi Penjualan
               </div>
-              <p class="text-grey">Track the flow</p>
+              <p class="text-grey">Penjualan berada di gengaman</p>
             </div>
           </div>
           <div class="card">
@@ -95,9 +95,9 @@
           <div class="flex items-center justify-between gap-6">
             <div>
               <div class="text-xl font-medium text-dark">
-                Transaction Purchase
+                Transaksi Pembelian
               </div>
-              <p class="text-grey">Track the flow</p>
+              <p class="text-grey">Pantau arus pembelian</p>
             </div>
           </div>
           <div class="card">

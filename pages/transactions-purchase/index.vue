@@ -11,7 +11,7 @@
           </svg>
         </button>
         <div class="text-[32px] font-semibold text-dark">
-          Transaksi
+          Transactions Purchase
         </div>
       </div>
       <div class="flex items-center gap-4">
@@ -26,11 +26,11 @@
         <div class="flex flex-col justify-between gap-6 sm:items-center sm:flex-row">
           <div>
             <div class="text-xl font-medium text-dark">
-              Daftar Transaksi
-              <p class="text-sm font-extralight text-slate-400 italic">Atur Transaksi</p>
+              List Of Transactions
+              <p class="text-sm font-extralight text-slate-400 italic">Manage your transactions</p>
             </div>
           </div>
-          <NuxtLink to="/transactions/add" class="btn btn-primary">Tambah pembelian</NuxtLink>
+          <NuxtLink to="/transactions/add" class="btn btn-primary">Add Transactions</NuxtLink>
         </div>
       </div>
 
@@ -49,8 +49,8 @@
         <div class="card !gap-y-10">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-grey">Total Transaksi</p>
-              <p class="text-xs text-grey">Siap untuk dijual</p>
+              <p class="text-grey">Total Transactions</p>
+              <p class="text-xs text-grey">Ready to sale</p>
               <div class="text-[32px] font-bold text-dark mt-[6px]">
                 {{ totalProduct }}
               </div>

@@ -11,24 +11,25 @@
       </span>
     </div>
     <div class="text-[32px] font-semibold text-dark mb-[30px]">
-      Add Brands
+      Tambah Merk
     </div>
     <form class="w-full flex flex-col card">
       <div class="flex flex-wrap">
         <div class="w-full mt-3 lg:mt-0">
           <div class="form-group px-2">
-            <label for="category" class="text-grey">Names</label>
+            <label for="category" class="text-grey">Nama Merk</label>
             <input v-model="brands.name" type="text" class="input-field">
           </div>
         </div>
       </div>
       <button @click="addBrand" type="button" class="w-full btn btn-primary mt-[20px]">
-        Submit
+        Tambah
       </button>
     </form>
   </section>
 </template>
 <script setup>
+const { $swal } = useNuxtApp()
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia';
 import { useCustomersStore } from '~/store/customers';
@@ -46,7 +47,7 @@ const showAlert = ref(false);
 const cookie = useCookie('token')
 
 const addBrand = async () => {
-  const response = await useFetch(`http://127.0.0.1:3333/api/brands`, {
+  const { status } = await useFetch(`http://127.0.0.1:3333/api/brands`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${cookie.value}`
@@ -55,13 +56,16 @@ const addBrand = async () => {
       name: brands.value.name,
     }
   })
-  if (response.status === 201) {
-    unit.value.name = null
+  if (status.value === 'success') {
+    brands.value.name = null
+    $swal.fire({
+      title: 'Success',
+      text: 'Data Berhasil di tambah',
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 2000
+    })
+    router.push('/brands')
   }
-  showAlert.value = true
-  setTimeout(() => {
-    router.back()
-    showAlert.value = false
-  }, 3000)
 }
 </script>

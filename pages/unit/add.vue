@@ -29,6 +29,7 @@
   </section>
 </template>
 <script setup>
+const { $swal } = useNuxtApp()
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia';
 import { useCustomersStore } from '~/store/customers';
@@ -52,7 +53,7 @@ const selectIsMember = ref({})
 const cookie = useCookie('token')
 
 const addCustomer = async () => {
-  const response = await useFetch(`http://127.0.0.1:3333/api/unit`, {
+  const { status } = await useFetch(`http://127.0.0.1:3333/api/unit`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${cookie.value}`
@@ -61,8 +62,15 @@ const addCustomer = async () => {
       name: unit.value.name,
     }
   })
-  if (response.status === 201) {
+  if (status.value === 'success') {
     unit.value.name = null
+    $swal.fire({
+      title: 'Success',
+      text: 'Data Berhasil di tambah',
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 2000
+    })
   }
   showAlert.value = true
   setTimeout(() => {

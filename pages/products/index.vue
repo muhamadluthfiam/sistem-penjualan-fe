@@ -11,7 +11,7 @@
             </svg>
           </button>
           <div class="text-[32px] font-semibold text-dark">
-            Products
+            Produk
           </div>
       </div>
       <div class="flex items-center gap-4">
@@ -26,11 +26,11 @@
         <div class="flex flex-col justify-between gap-6 sm:items-center sm:flex-row">
           <div>
             <div class="text-xl font-medium text-dark">
-              List Of Products
-              <p class="text-sm font-extralight text-slate-400 italic">Enpower your products</p>
+              Daftar produk
+              <p class="text-sm font-extralight text-slate-400 italic">Produk dalam gengaman anda.</p>
             </div>
           </div>
-          <NuxtLink to="/products/add" class="btn btn-primary">Add Product</NuxtLink>
+          <NuxtLink to="/products/add" class="btn btn-primary">Tambah Produk</NuxtLink>
         </div>
       </div>
 
@@ -39,7 +39,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-grey">Total Assets</p>
-              <p class="text-xs text-grey">Rupiah Format</p>
+              <p class="text-xs text-grey">Format Rupiah</p>
               <div class="text-[32px] font-bold text-dark mt-[6px]">
                {{ formatRupiah(profit) }}
               </div>
@@ -49,8 +49,8 @@
         <div class="card !gap-y-10">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-grey">Total Product</p>
-              <p class="text-xs text-grey">Ready to sale</p>
+              <p class="text-grey">Total Produk</p>
+              <p class="text-xs text-grey">Siap untuk dijual</p>
               <div class="text-[32px] font-bold text-dark mt-[6px]">
                 {{ totalProduct }}
               </div>
@@ -79,7 +79,6 @@
             <p class="font-sans text-5xl font-semibold">ARE YOU SURE DELETE DATA ?</p>
           </div>
           <div class="mt-4 flex flex-col-reverse justify-center items-center gap-4">
-            <button @click="cancelDelete" class="px-4 py-2 mr-2 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md">Cancel</button>
             <button @click="cancelDelete" class="px-4 py-2 text-green-500 bg-green-300 hover:bg-green-400 hover:text-green-600 rounded-md hover:shadow-md hover:underline ease-out duration-500">Cancel</button>
             <button @click="confirmDelete" class="px-4 py-2 text-red-500 bg-red-300 hover:bg-red-400 hover:text-red-600 rounded-md hover:shadow-md hover:underline ease-out duration-500">Delete</button>
           </div>
@@ -107,10 +106,11 @@ const { deleteProducts, getProducts } = useProductStore()
 const router = useRouter()
 const columns = ['No', 'Nama', 'Category', 'Quantity', 'Price', 'Selling price', 'Slug']
 const tableData = ref([])
-const itemToDelete = ref(null)
 const cookie = useCookie('token')
 let totalProduct = ref(null)
 let profit = ref(0)
+let itemToDelete = ref(false)
+let itemIdToDelete = ref(null)
 
 
 onMounted(async () => {
@@ -157,9 +157,9 @@ onMounted(async () => {
           formatter: (cell, row) => {
             return h('button', {
               className: 'py-2 mb-4 px-4 border rounded-md text-white bg-red-600',
-              onClick: () => {
-                  console.log(row.cells[0].data)
-                  router.push({ path: `/products/edit/` + row.cells[0].data })
+              onClick: async () => {
+                itemToDelete.value = true,
+                itemIdToDelete.value = row.cells[0].data
               }
             }, 'Delete');
           }
@@ -184,10 +184,18 @@ const cancelDelete = () => {
 }
 
 const confirmDelete = async () => {
-  if (itemToDelete.value) {
-    await deleteProducts(itemToDelete.value.id)
-    await productStore.getProducts()
-    itemToDelete.value = null
+  const { status } = await useFetch(`http://127.0.0.1:3333/api/products/${itemIdToDelete.value}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${cookie.value}`
+    }
+  })
+  if (status.value === 'success') {
+    itemToDelete.value = false
+    reloadNuxtApp({
+      path: "/products",
+      ttl: 1000,
+    });
   }
 }
 

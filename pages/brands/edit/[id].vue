@@ -29,6 +29,7 @@
   </section>
 </template>
 <script setup>
+const { $swal } = useNuxtApp()
 import { onBeforeMount, reactive, ref } from 'vue'
 import { storeToRefs } from 'pinia';
 import { useProductStore } from '~/store/product';
@@ -85,6 +86,13 @@ const updateData = async () => {
   })
   if (status.value === 'success') {
     unit.name = null
+    $swal.fire({
+      title: 'Success',
+      text: 'Data Berhasil di update',
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 2000
+    })
   }
   setTimeout(() => {
     router.push('/brands')

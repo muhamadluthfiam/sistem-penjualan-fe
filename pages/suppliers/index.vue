@@ -96,7 +96,7 @@ onMounted(async () => {
           return h('button', {
             className: 'py-2 mb-4 px-4 border rounded-md text-white bg-blue-600',
             onClick: () => {
-                router.push({ path: `/customers/edit/` + row.cells[0].data })
+                router.push({ path: `/suppliers/edit/` + row.cells[0].data })
             }
           }, 'Edit')
         }

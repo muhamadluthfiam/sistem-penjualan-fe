@@ -11,14 +11,13 @@
           </svg>
         </button>
         <div class="text-[32px] font-semibold text-dark">
-          Tambah Transaksi
+          Add Transactions
         </div>
       </div>
       <div class="flex flex-wrap justify-around">
         <div class=" p-6 w-full lg:w-6/12 rounded-lg flex-col">
-          <div class="rounded-xl mb-5">
+          <div class="border-2 border-black rounded-xl mb-5">
             <div class="w-full self-start flex flex-col card">
-              <span class="font-semibold text-3xl">Masukan Customer</span>
               <div class="flex flex-wrap lg:mt-4">
                 <div class="w-full">
                   <div class="form-group px-2 mt-4">
@@ -49,7 +48,7 @@
           <div id="myGrid"></div>
           
         </div>
-        <div class="w-full lg:w-4/12 self-start mt-10 flex flex-col bg-white">
+        <div class="w-full lg:w-4/12 self-start flex flex-col bg-white">
           <div class="flex-1 flex flex-col overflow-auto">
             <div class="h-16 text-center flex justify-center">
               <div class="pl-8 text-left text-lg py-4 relative">

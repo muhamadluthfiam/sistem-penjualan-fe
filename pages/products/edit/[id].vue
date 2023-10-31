@@ -7,13 +7,13 @@
       <div class="flex flex-wrap">
         <div class="w-full lg:w-1/2 mt-3 lg:mt-0">
           <div class="form-group px-2">
-            <label for="" class="text-grey">Product Name</label>
+            <label for="" class="text-grey">Nama Produk</label>
             <input v-model="product.name" type="text" class="input-field">
           </div>
         </div>
         <div class="w-full lg:w-1/2 mt-3 lg:mt-0">
           <div class="form-group px-2">
-            <label for="" class="text-grey">Quantity</label>
+            <label for="" class="text-grey">Jumlah</label>
             <input v-model="product.quantity" type="number" class="input-field">
           </div>
         </div>
@@ -21,18 +21,18 @@
       <div class="flex flex-wrap lg:mt-4">
         <div class="w-full lg:w-3/12 mt-3 lg:mt-0">
           <div class="form-group px-2">
-            <label for="" class="text-grey">Basic Price</label>
+            <label for="" class="text-grey">Harga Dasar</label>
             <input v-model="product.purchase_price" type="text" class="input-field">
           </div>
         </div>
         <div class="w-full lg:w-3/12 mt-3 lg:mt-0">
           <div class="form-group px-2">
-            <label for="" class="text-grey">Selling Price</label>
+            <label for="" class="text-grey">Harga Jual</label>
             <input v-model="product.sale_price" type="number" class="input-field">
           </div>
         </div>
         <div class="relative w-full lg:w-3/12 mt-3 lg:mt-0" >
-          <label for="" class="text-grey">Category</label>
+          <label for="" class="text-grey">Kategori</label>
           <select class="block w-full input-field mt-2" v-model="selectedCategories">
             <option v-for="(val, i) in categories" :key="i" :value="val">
               {{ val.name }}
@@ -40,7 +40,7 @@
           </select>
         </div>
         <div class="relative w-full lg:w-3/12 mt-3 lg:mt-0" >
-          <label for="" class="text-grey">Brands</label>
+          <label for="" class="text-grey">Merk</label>
           <select class="block w-full input-field mt-2" v-model="selectedBrands">
             <option v-for="(val, i) in brands" :key="i" :value="val">
               {{ val.name }}
@@ -48,7 +48,7 @@
           </select>
         </div>
         <div class="relative w-full lg:w-3/12 mt-3 lg:mt-0" >
-          <label for="" class="text-grey">Units</label>
+          <label for="" class="text-grey">Unit</label>
           <select class="block w-full input-field mt-2" v-model="selectedUnits">
             <option v-for="(val, i) in units" :key="i" :value="val">
               {{ val.name }}
@@ -63,7 +63,7 @@
         </div>
       </div>
       <button @click="updateData" type="button" class="w-full btn btn-primary mt-[20px]">
-        Continue
+        Tambah
       </button>
     </form>
   </section>

@@ -37,6 +37,7 @@
   </section>
 </template>
 <script setup>
+const { $swal } = useNuxtApp()
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia';
 import { useCustomersStore } from '~/store/customers';
@@ -77,10 +78,17 @@ const addSupplier = async () => {
     supplier.value.name = null
     supplier.value.address = null
     supplier.value.phone = null
+    $swal.fire({
+      title: 'Success',
+      text: 'Data Berhasil di tambah',
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 2000
+    })
   }
   showAlert.value = true
   setTimeout(() => {
-    router.back()
+    router.push('/suppliers')
     showAlert.value = false
   }, 3000)
 }

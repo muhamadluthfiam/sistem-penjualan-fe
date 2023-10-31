@@ -11,7 +11,7 @@
             </svg>
           </button>
           <div class="text-[32px] font-semibold text-dark">
-            Brand
+            Merk
           </div>
       </div>
       <div class="flex items-center gap-4">
@@ -26,12 +26,12 @@
         <div class="flex flex-col justify-between gap-6 sm:items-center sm:flex-row">
           <div>
               <div class="text-xl font-medium text-dark">
-                List Of Brands
-                <p class="text-sm font-extralight text-slate-400 italic">The Enterprise Brands</p>
+                Daftar Merk
+                <p class="text-sm font-extralight text-slate-400 italic">Brand terbaik</p>
               </div>
               <!-- <p class="text-grey">Your team powers</p> -->
           </div>
-          <NuxtLink to="/brands/add" class="btn btn-primary">Add Brands</NuxtLink>
+          <NuxtLink to="/brands/add" class="btn btn-primary">Tambah Merk</NuxtLink>
         </div>
       </div>
     </section>

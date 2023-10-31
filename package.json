@@ -28,6 +28,7 @@
     "date-fns": "^2.30.0",
     "gridjs": "^6.0.6",
     "pinia": "^2.1.6",
+    "sweetalert2": "^11.9.0",
     "vue-chartjs": "^5.2.0"
   }
 }

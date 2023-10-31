@@ -20,7 +20,7 @@
         <div class="text-sm text-grey">Master data</div>
         <NuxtLink to="/employees" class="nav-link">
           <img src="/svgs/ic-users.svg" alt="">
-          Employees
+          Pegawai
         </NuxtLink>
         <NuxtLink to="/roles" class="nav-link">
           <img src="/svgs/ic-flag.svg" alt="">
@@ -28,34 +28,38 @@
         </NuxtLink>
       </div>
       <div class="flex flex-col gap-4">
-        <div class="text-sm text-grey">Daily use</div>
+        <div class="text-sm text-grey">Sehari hari</div>
         <NuxtLink to="/" class="nav-link">
           <img src="/svgs/ic-grid.svg" alt="">
           Dashboard
         </NuxtLink>
         <NuxtLink to="/products" class="nav-link">
           <img src="/svgs/ic-ricbox.svg" alt="">
-          Product
+          Produk
         </NuxtLink>
         <NuxtLink to="/brands" class="nav-link">
           <img src="/svgs/ic-flag.svg" alt="">
-          Brands
+          Merk
         </NuxtLink>
         <NuxtLink to="/transactions" class="nav-link">
           <img src="/svgs/ic-transaction.svg" alt="">
-          Transactions
+          Penjualan
+        </NuxtLink>
+        <NuxtLink to="/transactions-purchase" class="nav-link">
+          <img src="/svgs/ic-transaction.svg" alt="">
+          Pembelian
         </NuxtLink>
         <NuxtLink to="/categories" class="nav-link">
           <img src="/svgs/ic-category.svg" alt="">
-          Categories
+          Kategori
         </NuxtLink>
         <NuxtLink to="/customers" class="nav-link">
           <img src="/svgs/ic-users.svg" alt="">
-          Customers
+          Pelanggan
         </NuxtLink>
         <NuxtLink to="/suppliers" class="nav-link">
           <img src="/svgs/ic-gift.svg" alt="">
-          Suppliers
+          Distributor
         </NuxtLink>
         <NuxtLink to="/unit" class="nav-link">
           <img src="/svgs/ic-stack.svg" alt="">
@@ -67,7 +71,7 @@
         </NuxtLink> -->
         <button @click="logout()" class="nav-link">
           <img src="/svgs/ic-signout.svg" alt="">
-          Logout
+          Keluar
         </button>
       </div>
     </div>
