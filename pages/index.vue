@@ -34,9 +34,9 @@
           <div class="card !gap-y-10 min-h-[200px]">
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-grey">Pegawai</p>
+                <p class="text-grey">Total Quantity Produk Pembelian</p>
                 <div class="text-[32px] font-bold text-dark mt-[6px]">
-                    0
+                  {{ total }}
                 </div>
               </div>
               <a href="employee_create.html">
@@ -49,7 +49,7 @@
               <div>
                 <p class="text-grey">Total Assets</p>
                 <div class="text-[32px] font-bold text-dark mt-[6px]">
-                  0
+                  Rp.{{ rupiahFormat(totalAssets) }}
                 </div>
               </div>
               <a href="#">
@@ -62,7 +62,7 @@
               <div>
                 <p class="text-grey">Produk</p>
                 <div class="text-[32px] font-bold text-dark mt-[6px]">
-                    0
+                  {{ product }}
                 </div>
               </div>
               <a href="#">
@@ -115,8 +115,14 @@
 import { storeToRefs } from 'pinia';
 import { useUtilsStore } from '~/store/utils';
 import { Bar } from 'vue-chartjs'
+import { elements } from 'chart.js';
 
 const { isOpen } = storeToRefs(useUtilsStore());
+const cookie = useCookie('token')
+
+const total = ref(0)
+const totalAssets = ref(0)
+const product = ref(0)
 
 const chartData = ref({
   labels: ['January', 'February', 'March', 'April', 'May'],
@@ -132,6 +138,59 @@ const chartOptions = ref({
   responsive: true,
   maintainAspectRatio: false,
 })
+
+onMounted(async () => {
+  const product = await fetch('http://127.0.0.1:3333/api/products', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${cookie.value}`
+    }
+  })
+  const saleTransaction = await fetch('http://127.0.0.1:3333/api/sale-transaction', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${cookie.value}`
+    }
+  })
+  const purchaseTransaction = await fetch('http://127.0.0.1:3333/api/detail-purchase-transaction', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${cookie.value}`
+    }
+  })
+  if (product.status === 200) {
+    const dataProduct = await product.json()
+    console.log(dataProduct)
+    dataProduct.data.data.forEach(element => {
+      totalAssets.value += element.purchase_price
+    })
+    product.value = dataProduct.data.data.length
+    console.log(product.value)
+  }
+  if(saleTransaction.status === 200) {
+     const dataModelSale = await saleTransaction.json()
+    //  console.log(dataModelSale)
+  }
+  if(purchaseTransaction.status === 200) {
+     const dataModelPurchase = await purchaseTransaction.json()
+     dataModelPurchase.data.data.forEach(element => {
+        total.value += element.quantity
+     });
+  }
+  
+})
+
+function rupiahFormat (val) {
+  if (val) {
+    return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+  }
+}
+
+
+
 
 </script>
 

@@ -26,12 +26,12 @@
         <div class="flex flex-col justify-between gap-6 sm:items-center sm:flex-row">
           <div>
               <div class="text-xl font-medium text-dark">
-                List Of Suppliers
-                <p class="text-sm font-extralight text-slate-400 italic">The Enterprise Suppliers</p>
+                Distributor terbaik berada di tangan anda.
+                <p class="text-sm font-extralight text-slate-400 italic">Inilah Distributor</p>
               </div>
               <!-- <p class="text-grey">Your team powers</p> -->
           </div>
-          <NuxtLink to="/suppliers/add" class="btn btn-primary">Add Suppliers</NuxtLink>
+          <NuxtLink to="/suppliers/add" class="btn btn-primary">Tambah Distributor</NuxtLink>
         </div>
       </div>
     </section>

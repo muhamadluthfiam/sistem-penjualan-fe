@@ -26,8 +26,8 @@
         <div class="flex flex-col justify-between gap-6 sm:items-center sm:flex-row">
           <div>
               <div class="text-xl font-medium text-dark">
-                List Of Units
-                <p class="text-sm font-extralight text-slate-400 italic">The Enterprise Unit</p>
+                Daftar Satuan Produk
+                <p class="text-sm font-extralight text-slate-400 italic">Alokasikan jumlah dengan Unit.</p>
               </div>
               <!-- <p class="text-grey">Your team powers</p> -->
           </div>
